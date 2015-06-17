@@ -1,12 +1,14 @@
 package list
 
 import (
+	"../config"
 	"fmt"
 	"io"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/olekukonko/tablewriter"
 )
@@ -57,8 +59,20 @@ func describeInstance(writer *tablewriter.Table, i *ec2.Instance) {
 	})
 }
 
-func showList(writer io.Writer) {
-	svc := ec2.New(&aws.Config{Region: "ap-northeast-1"})
+func (c *Command) showList(writer io.Writer) {
+	conf := config.GetConfig()
+
+	credentials := credentials.NewStaticCredentials(
+		conf.Aws.AccessKeyId,
+		conf.Aws.SecretAccessKey,
+		"")
+
+	svc := ec2.New(
+		&aws.Config{
+			Region:      "ap-northeast-1",
+			Credentials: credentials,
+		},
+	)
 
 	params := &ec2.DescribeInstancesInput{}
 
@@ -73,6 +87,7 @@ func showList(writer io.Writer) {
 	table.SetBorder(false)
 	table.SetRowLine(false)
 	table.SetColumnSeparator("")
+	table.SetColWidth(80)
 
 	for _, r := range res.Reservations {
 		for _, i := range r.Instances {
