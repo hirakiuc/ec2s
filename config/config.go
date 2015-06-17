@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"github.com/BurntSushi/toml"
@@ -20,11 +20,11 @@ func GetConfig() *Config {
 	return &config
 }
 
-func LoadConfig(path string) *Config {
+func LoadConfig(path string) (*Config, error) {
 	_, err := toml.DecodeFile(path, &config)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	return &config
+	return &config, nil
 }
