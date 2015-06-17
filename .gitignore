@@ -38,3 +38,4 @@ Session.vim
 /.bundle
 /ec2s
 /.envrc
+/ec2s.toml
