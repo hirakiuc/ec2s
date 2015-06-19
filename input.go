@@ -7,7 +7,7 @@ import (
 	"os/exec"
 )
 
-func main() {
+func inputExec() {
 	cmd := exec.Command("env")
 	stdin, err := cmd.StdinPipe()
 
