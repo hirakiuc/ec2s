@@ -86,7 +86,7 @@ func (c *Command) showList(writer io.Writer) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetBorder(false)
 	table.SetRowLine(false)
-	table.SetColumnSeparator("")
+	table.SetColumnSeparator("\t")
 	table.SetColWidth(80)
 
 	for _, r := range res.Reservations {
