@@ -2,12 +2,12 @@ package list
 
 import (
 	"../config"
+	"../formatter"
 	"fmt"
 	"io"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/olekukonko/tablewriter"
 )
@@ -33,64 +33,49 @@ func showError(err error) {
 	}
 }
 
-func describeInstance(writer *tablewriter.Table, i *ec2.Instance) {
-	var tag_name string
-	for _, t := range i.Tags {
-		if *t.Key == "Name" {
-			tag_name = *t.Value
-		}
-	}
+func describeParams() *ec2.DescribeInstancesInput {
+	return &ec2.DescribeInstancesInput{}
+}
 
-	var ipAddress string
-	if i.PublicIPAddress == nil {
-		ipAddress = "---"
-	} else {
-		ipAddress = *i.PublicIPAddress
-	}
+func ec2Service() *ec2.EC2 {
+	conf := config.GetConfig()
 
-	writer.Append([]string{
-		tag_name,
-		*i.InstanceID,
-		*i.InstanceType,
-		*i.Placement.AvailabilityZone,
-		ipAddress,
-		*i.State.Name,
-	})
+	return ec2.New(
+		&aws.Config{
+			Region:      conf.Aws.Region,
+			Credentials: conf.AwsCredentials(),
+		},
+	)
+}
+
+func newTableWriter(writer io.Writer) *tablewriter.Table {
+	table := tablewriter.NewWriter(writer)
+
+	table.SetBorder(false)
+	table.SetRowLine(false)
+	table.SetColumnSeparator("\t")
+	table.SetColWidth(80)
+
+	return table
 }
 
 func ShowEc2Instances(writer io.Writer) int {
-	conf := config.GetConfig()
-
-	credentials := credentials.NewStaticCredentials(
-		conf.Aws.AccessKeyId,
-		conf.Aws.SecretAccessKey,
-		"")
-
-	svc := ec2.New(
-		&aws.Config{
-			Region:      "ap-northeast-1",
-			Credentials: credentials,
-		},
+	res, err := ec2Service().DescribeInstances(
+		describeParams(),
 	)
 
-	params := &ec2.DescribeInstancesInput{}
-
-	res, err := svc.DescribeInstances(params)
 	if err != nil {
 		fmt.Println("failed...")
 		showError(err)
 		return 1
 	}
 
-	table := tablewriter.NewWriter(writer)
-	table.SetBorder(false)
-	table.SetRowLine(false)
-	table.SetColumnSeparator("\t")
-	table.SetColWidth(80)
+	table := newTableWriter(writer)
+	formatter := formatter.NewEc2Formatter()
 
 	for _, r := range res.Reservations {
 		for _, i := range r.Instances {
-			describeInstance(table, i)
+			table.Append(formatter.Format(i))
 		}
 	}
 

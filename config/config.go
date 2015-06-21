@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/user"
 	"strings"
+
+	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 type Config struct {
@@ -39,4 +41,11 @@ func expandPath(path string) string {
 	} else {
 		return path
 	}
+}
+
+func (c *Config) AwsCredentials() *credentials.Credentials {
+	return credentials.NewStaticCredentials(
+		c.Aws.AccessKeyId,
+		c.Aws.SecretAccessKey,
+		"")
 }
