@@ -18,8 +18,7 @@ func (c *Command) Help() string {
 
 func (c *Command) Run(args []string) int {
 	c.parseOptions(args)
-	c.showVpcs(os.Stdout)
-	return 0
+	return c.showVpcs(os.Stdout)
 }
 
 func (c *Command) Synopsis() string {
