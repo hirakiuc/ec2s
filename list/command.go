@@ -18,8 +18,7 @@ func (c *Command) Help() string {
 
 func (c *Command) Run(args []string) int {
 	c.parseOptions(args)
-	c.showList(os.Stdout)
-	return 0
+	return ShowEc2Instances(os.Stdout)
 }
 
 func (c *Command) Synopsis() string {
