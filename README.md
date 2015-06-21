@@ -14,7 +14,7 @@ AWS_SECRET_ACCESS_KEY=yyyy
 AWS_REGION=ap-northeast-1
 
 [peco]
-path = "peco"
+path = '/path/to/peco'
 ```
 
 # Usage

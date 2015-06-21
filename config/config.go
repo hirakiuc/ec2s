@@ -7,16 +7,34 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/k0kubun/pp"
 )
 
 type Config struct {
-	Aws Aws
+	Aws  Aws
+	Peco Peco
+	Ssh  Ssh
 }
 
 type Aws struct {
 	AccessKeyId     string `toml:"AWS_ACCESS_KEY_ID"`
 	SecretAccessKey string `toml:"AWS_SECRET_ACCESS_KEY"`
 	Region          string `toml:"AWS_REGION"`
+}
+
+type Peco struct {
+	Path string `toml:"path"`
+}
+
+type Ssh struct {
+	Port          int            `toml:"port"`
+	User          string         `toml:"user"`
+	IdentityFiles []IdentityFile `toml:"identity_file"`
+}
+
+type IdentityFile struct {
+	Name string `toml:"name"`
+	Path string `toml:"path"`
 }
 
 var config Config
@@ -48,4 +66,16 @@ func (c *Config) AwsCredentials() *credentials.Credentials {
 		c.Aws.AccessKeyId,
 		c.Aws.SecretAccessKey,
 		"")
+}
+
+func (ssh *Ssh) IdentityFileForName(name string) *string {
+	pp.Println(ssh)
+
+	for _, identityFile := range ssh.IdentityFiles {
+		if identityFile.Name == name {
+			return &identityFile.Path
+		}
+	}
+
+	return nil
 }

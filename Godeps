@@ -5,3 +5,5 @@ github.com/olekukonko/tablewriter
 
 github.com/mitchellh/cli
 github.com/BurntSushi/toml
+
+gopkg.in/pipe.v2
