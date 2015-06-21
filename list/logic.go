@@ -4,7 +4,6 @@ import (
 	"../config"
 	"fmt"
 	"io"
-	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -59,7 +58,7 @@ func describeInstance(writer *tablewriter.Table, i *ec2.Instance) {
 	})
 }
 
-func (c *Command) showList(writer io.Writer) {
+func ShowEc2Instances(writer io.Writer) int {
 	conf := config.GetConfig()
 
 	credentials := credentials.NewStaticCredentials(
@@ -80,10 +79,10 @@ func (c *Command) showList(writer io.Writer) {
 	if err != nil {
 		fmt.Println("failed...")
 		showError(err)
-		os.Exit(1)
+		return 1
 	}
 
-	table := tablewriter.NewWriter(os.Stdout)
+	table := tablewriter.NewWriter(writer)
 	table.SetBorder(false)
 	table.SetRowLine(false)
 	table.SetColumnSeparator("\t")
@@ -96,4 +95,5 @@ func (c *Command) showList(writer io.Writer) {
 	}
 
 	table.Render()
+	return 0
 }
