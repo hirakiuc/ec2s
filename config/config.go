@@ -2,6 +2,9 @@ package config
 
 import (
 	"github.com/BurntSushi/toml"
+	"os"
+	"os/user"
+	"strings"
 )
 
 type Config struct {
@@ -21,10 +24,19 @@ func GetConfig() *Config {
 }
 
 func LoadConfig(path string) (*Config, error) {
-	_, err := toml.DecodeFile(path, &config)
+	_, err := toml.DecodeFile(expandPath(path), &config)
 	if err != nil {
 		return nil, err
 	}
 
 	return &config, nil
+}
+
+func expandPath(path string) string {
+	if path[:2] == "~/" {
+		user, _ := user.Current()
+		return strings.Replace(path, "~/", user.HomeDir+string(os.PathSeparator), 1)
+	} else {
+		return path
+	}
 }
