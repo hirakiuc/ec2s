@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"./list"
+	"./vpcs"
 	"github.com/mitchellh/cli"
 )
 
@@ -16,6 +17,9 @@ func main() {
 	c.Commands = map[string]cli.CommandFactory{
 		"list": func() (cli.Command, error) {
 			return &list.Command{}, nil
+		},
+		"vpcs": func() (cli.Command, error) {
+			return &vpcs.Command{}, nil
 		},
 	}
 
