@@ -14,9 +14,9 @@ type Config struct {
 }
 
 type Aws struct {
-	AccessKeyId     string `toml:"ACCESS_KEY_ID"`
-	SecretAccessKey string `toml:"SECRET_ACCESS_KEY"`
-	Region          string `toml:"REGION"`
+	AccessKeyId     string `toml:"AWS_ACCESS_KEY_ID"`
+	SecretAccessKey string `toml:"AWS_SECRET_ACCESS_KEY"`
+	Region          string `toml:"AWS_REGION"`
 }
 
 var config Config
