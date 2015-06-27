@@ -5,6 +5,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
 type Command struct{}
