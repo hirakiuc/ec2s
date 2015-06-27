@@ -1,6 +1,7 @@
 package list
 
 import (
+	"../cache"
 	"../common"
 	"../formatter"
 	"fmt"
@@ -19,7 +20,31 @@ func describeParams() *ec2.DescribeInstancesInput {
 	return &ec2.DescribeInstancesInput{}
 }
 
+func vpcId(instance *ec2.Instance) string {
+	if instance.VPCID == nil {
+		return ""
+	} else {
+		return *instance.VPCID
+	}
+}
+
+func loadVpcCache() *cache.VpcCache {
+	cache := cache.GetVpcCache()
+	if cache.MakeCache() == false {
+		return nil
+	} else {
+		return cache
+	}
+}
+
 func ShowEc2Instances(writer io.Writer) int {
+	vpcCache := loadVpcCache()
+	if vpcCache == nil {
+		fmt.Println("failed to make vpc cache..")
+		return 10
+	}
+	instanceCache := cache.GetEc2InstanceCache()
+
 	service := common.Ec2Service()
 	res, err := service.DescribeInstances(describeParams())
 
@@ -34,7 +59,13 @@ func ShowEc2Instances(writer io.Writer) int {
 
 	for _, r := range res.Reservations {
 		for _, i := range r.Instances {
-			table.Append(formatter.Format(i))
+			vpc := vpcCache.ReadEntry(vpcId(i))
+			table.Append(formatter.Format(vpc, i))
+
+			instanceCache.WriteEntry(
+				*i.InstanceID,
+				i,
+			)
 		}
 	}
 
