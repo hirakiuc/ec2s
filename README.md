@@ -9,9 +9,12 @@ WARNING: This project is under development.
 ```
 $ cat ~/.ec2s
 [aws]
-ACCESS_KEY_ID=xxxx
-SECRET_ACCESS_KEY=yyyy
-REGION=ap-northeast-1
+AWS_ACCESS_KEY_ID=xxxx
+AWS_SECRET_ACCESS_KEY=yyyy
+AWS_REGION=ap-northeast-1
+
+[peco]
+path = "peco"
 ```
 
 # Usage
