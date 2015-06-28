@@ -9,12 +9,24 @@ WARNING: This project is under development.
 ```
 $ cat ~/.ec2s
 [aws]
-AWS_ACCESS_KEY_ID=xxxx
-AWS_SECRET_ACCESS_KEY=yyyy
-AWS_REGION=ap-northeast-1
+AWS_ACCESS_KEY_ID="xxxx"
+AWS_SECRET_ACCESS_KEY="yyyy"
+AWS_REGION="ap-northeast-1"
 
 [peco]
-path = '/path/to/peco'
+path = "/path/to/peco"
+
+[ssh]
+port = 22
+user = "my-user"
+
+[[ssh.identity_file]]
+name = "my_keypair"
+path = "~/.ssh/my_keypair.private_key"
+
+[[ssh.identity_file]]
+name = "my_other_keypair"
+path = "~/.ssh/my_other_keypair.private_key"
 ```
 
 # Usage
@@ -29,6 +41,13 @@ $ ec2s list
 $ ec2s list --vpc 'name'
 
 $ ec2s list --vpcid vpc-xxxx
+```
+
+## ssh subcommand
+
+```
+# login via ssh to the ec2 instance.
+$ ec2s ssh
 ```
 
 ## vpcs subcommand
