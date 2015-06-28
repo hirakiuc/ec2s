@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"./list"
+	"./ssh"
 	"./vpcs"
 	"github.com/mitchellh/cli"
 )
@@ -20,6 +21,9 @@ func main() {
 		},
 		"vpcs": func() (cli.Command, error) {
 			return &vpcs.Command{}, nil
+		},
+		"ssh": func() (cli.Command, error) {
+			return &ssh.Command{}, nil
 		},
 	}
 
