@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/k0kubun/pp"
 )
 
 type Config struct {
@@ -69,8 +68,6 @@ func (c *Config) AwsCredentials() *credentials.Credentials {
 }
 
 func (ssh *Ssh) IdentityFileForName(name string) *string {
-	pp.Println(ssh)
-
 	for _, identityFile := range ssh.IdentityFiles {
 		if identityFile.Name == name {
 			return &identityFile.Path

@@ -29,10 +29,8 @@ func ec2instance(line string) *ec2.Instance {
 	vars := strings.Split(line, "\t")
 
 	instanceId := strings.Trim(vars[2], " ")
-	fmt.Printf("instanceId: %s\n", instanceId)
 
 	cache := cache.GetEc2InstanceCache()
-	fmt.Printf("entries: %d\n", len(cache.Entries))
 	instance := cache.ReadEntry(instanceId)
 	if instance == nil {
 		fmt.Printf("Can't find ec2 instance: '%s'\n", instanceId)
