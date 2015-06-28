@@ -1,12 +1,13 @@
 package ssh
 
 import (
-	"../config"
 	"flag"
 	"fmt"
 	"os"
 
 	"github.com/aws/aws-sdk-go/service/ec2"
+
+	"../../config"
 )
 
 type Command struct{}

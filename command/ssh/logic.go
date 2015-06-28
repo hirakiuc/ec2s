@@ -1,10 +1,6 @@
 package ssh
 
 import (
-	"../cache"
-	"../config"
-	"../list"
-
 	"bytes"
 	"fmt"
 	"io"
@@ -15,6 +11,10 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"gopkg.in/pipe.v2"
+
+	"../../cache"
+	"../../config"
+	"../list"
 )
 
 func listEc2Instances(writer io.Writer) int {

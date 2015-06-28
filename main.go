@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"./list"
-	"./ssh"
-	"./vpcs"
+	"./command/list"
+	"./command/ssh"
+	"./command/vpcs"
+
 	"github.com/mitchellh/cli"
 )
 

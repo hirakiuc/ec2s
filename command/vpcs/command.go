@@ -1,10 +1,11 @@
 package vpcs
 
 import (
-	"../config"
 	"flag"
 	"fmt"
 	"os"
+
+	"../../config"
 )
 
 type Command struct {

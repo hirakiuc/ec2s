@@ -1,10 +1,11 @@
 package list
 
 import (
-	"../config"
 	"flag"
 	"fmt"
 	"os"
+
+	"../../config"
 )
 
 type Command struct {

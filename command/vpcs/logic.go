@@ -1,10 +1,11 @@
 package vpcs
 
 import (
-	"../common"
-	"../formatter"
 	"fmt"
 	"io"
+
+	"../../common"
+	"../../formatter"
 )
 
 func (c *Command) showVpcs(writer io.Writer) int {
