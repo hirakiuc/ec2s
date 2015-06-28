@@ -17,8 +17,8 @@ import (
 	"../list"
 )
 
-func listEc2Instances(writer io.Writer) int {
-	return list.ShowEc2Instances(writer)
+func listEc2Instances(writer io.Writer, filter *ec2.DescribeInstancesInput) int {
+	return list.ShowEc2Instances(writer, filter)
 }
 
 func ec2instance(line string) *ec2.Instance {
@@ -39,9 +39,9 @@ func ec2instance(line string) *ec2.Instance {
 	return instance
 }
 
-func (c *Command) choseInstance() ([]*ec2.Instance, int) {
+func (c *Command) choseInstance(filter *ec2.DescribeInstancesInput) ([]*ec2.Instance, int) {
 	buffer := bytes.NewBuffer(nil)
-	listEc2Instances(buffer)
+	listEc2Instances(buffer, filter)
 
 	conf := config.GetConfig()
 

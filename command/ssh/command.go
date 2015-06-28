@@ -7,10 +7,21 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 
+	"../../common"
 	"../../config"
 )
 
-type Command struct{}
+type Command struct {
+	*common.InstanceFilter
+}
+
+func GetCommand() *Command {
+	return &Command{
+		&common.InstanceFilter{
+			VpcId: "",
+		},
+	}
+}
 
 func (c *Command) Help() string {
 	return "ec2s ssh"
@@ -18,7 +29,9 @@ func (c *Command) Help() string {
 
 func (c *Command) Run(args []string) int {
 	c.parseOptions(args)
-	instances, ret := c.choseInstance()
+	instances, ret := c.choseInstance(
+		common.InstancesFilter(c),
+	)
 	if ret != 0 {
 		return ret
 	}
@@ -50,6 +63,7 @@ func (c *Command) parseOptions(args []string) {
 	var configPath string
 
 	f := flag.NewFlagSet("ssh", flag.ExitOnError)
+	f.StringVar(&c.VpcId, "vpc-id", "", "vpc id")
 	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
 	f.Parse(args)
 

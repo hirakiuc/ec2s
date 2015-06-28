@@ -8,9 +8,10 @@ import (
 	"../../config"
 )
 
-type Command struct {
-	VpcName string
-	VpcId   string
+type Command struct{}
+
+func GetCommand() *Command {
+	return &Command{}
 }
 
 func (c *Command) Help() string {
