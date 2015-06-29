@@ -17,10 +17,6 @@ import (
 // Sample Code
 // https://github.com/aws/aws-sdk-go/blob/7e9078c250876f26da48aaf36b8dce6a462ecd8a/service/ec2/examples_test.go#L2876
 
-func describeParams() *ec2.DescribeInstancesInput {
-	return &ec2.DescribeInstancesInput{}
-}
-
 func vpcId(instance *ec2.Instance) string {
 	if instance.VPCID == nil {
 		return ""
@@ -38,7 +34,7 @@ func loadVpcCache() *cache.VpcCache {
 	}
 }
 
-func ShowEc2Instances(writer io.Writer) int {
+func ShowEc2Instances(writer io.Writer, filter *ec2.DescribeInstancesInput) int {
 	vpcCache := loadVpcCache()
 	if vpcCache == nil {
 		fmt.Println("failed to make vpc cache..")
@@ -47,7 +43,7 @@ func ShowEc2Instances(writer io.Writer) int {
 	instanceCache := cache.GetEc2InstanceCache()
 
 	service := common.Ec2Service()
-	res, err := service.DescribeInstances(describeParams())
+	res, err := service.DescribeInstances(filter)
 
 	if err != nil {
 		fmt.Println("failed...")

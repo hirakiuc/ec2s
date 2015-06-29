@@ -18,13 +18,13 @@ func main() {
 	c.Args = os.Args[1:]
 	c.Commands = map[string]cli.CommandFactory{
 		"list": func() (cli.Command, error) {
-			return &list.Command{}, nil
+			return list.GetCommand(), nil
 		},
 		"vpcs": func() (cli.Command, error) {
-			return &vpcs.Command{}, nil
+			return vpcs.GetCommand(), nil
 		},
 		"ssh": func() (cli.Command, error) {
-			return &ssh.Command{}, nil
+			return ssh.GetCommand(), nil
 		},
 	}
 

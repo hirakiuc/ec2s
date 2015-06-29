@@ -5,12 +5,20 @@ import (
 	"fmt"
 	"os"
 
+	"../../common"
 	"../../config"
 )
 
 type Command struct {
-	VpcName string
-	VpcId   string
+	*common.InstanceFilter
+}
+
+func GetCommand() *Command {
+	return &Command{
+		&common.InstanceFilter{
+			VpcId: "",
+		},
+	}
 }
 
 func (c *Command) Help() string {
@@ -19,7 +27,10 @@ func (c *Command) Help() string {
 
 func (c *Command) Run(args []string) int {
 	c.parseOptions(args)
-	return ShowEc2Instances(os.Stdout)
+	return ShowEc2Instances(
+		os.Stdout,
+		common.InstancesFilter(c),
+	)
 }
 
 func (c *Command) Synopsis() string {
@@ -30,11 +41,9 @@ func (c *Command) parseOptions(args []string) {
 	var configPath string
 
 	f := flag.NewFlagSet("list", flag.ExitOnError)
-	f.StringVar(&c.VpcName, "vpc-name", "", "vpc name")
+	f.StringVar(&c.VpcId, "vpc-id", "", "vpc id")
 	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
 	f.Parse(args)
-
-	fmt.Println(c.VpcName)
 
 	_, err := config.LoadConfig(configPath)
 	if err != nil {
