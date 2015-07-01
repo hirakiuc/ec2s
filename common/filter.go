@@ -34,7 +34,13 @@ func InstancesFilter(options FilterInterface) *ec2.DescribeInstancesInput {
 		filters = append(filters, vpcFilter)
 	}
 
-	return &ec2.DescribeInstancesInput{
-		Filters: filters,
+	// If Filters was empty array, aws-sdk-go return error on ec2.DescribeInstances method.
+	// So this code avoid the error.
+	if len(filters) > 0 {
+		return &ec2.DescribeInstancesInput{
+			Filters: filters,
+		}
+	} else {
+		return &ec2.DescribeInstancesInput{}
 	}
 }
