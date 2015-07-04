@@ -13,12 +13,13 @@ import (
 	"gopkg.in/pipe.v2"
 
 	"../../cache"
+	"../../common"
 	"../../config"
 	"../list"
 )
 
-func listEc2Instances(writer io.Writer, filter *ec2.DescribeInstancesInput) int {
-	return list.ShowEc2Instances(writer, filter)
+func listEc2Instances(writer io.Writer, options common.FilterInterface) int {
+	return list.ShowEc2Instances(writer, options)
 }
 
 func ec2instance(line string) *ec2.Instance {
@@ -39,9 +40,9 @@ func ec2instance(line string) *ec2.Instance {
 	return instance
 }
 
-func (c *Command) choseInstance(filter *ec2.DescribeInstancesInput) ([]*ec2.Instance, int) {
+func (c *Command) choseInstance() ([]*ec2.Instance, int) {
 	buffer := bytes.NewBuffer(nil)
-	listEc2Instances(buffer, filter)
+	listEc2Instances(buffer, c)
 
 	conf := config.GetConfig()
 

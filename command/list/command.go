@@ -27,10 +27,7 @@ func (c *Command) Help() string {
 
 func (c *Command) Run(args []string) int {
 	c.parseOptions(args)
-	return ShowEc2Instances(
-		os.Stdout,
-		common.InstancesFilter(c),
-	)
+	return ShowEc2Instances(os.Stdout, c)
 }
 
 func (c *Command) Synopsis() string {
@@ -42,6 +39,7 @@ func (c *Command) parseOptions(args []string) {
 
 	f := flag.NewFlagSet("list", flag.ExitOnError)
 	f.StringVar(&c.VpcId, "vpc-id", "", "vpc id")
+	f.StringVar(&c.VpcName, "vpc-name", "", "vpc name")
 	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
 	f.Parse(args)
 
