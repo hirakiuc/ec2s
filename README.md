@@ -1,6 +1,6 @@
 # ec2s
 
-EC2 instance viewer
+EC2 instance operation tool with ssh, peco.
 
 WARNING: This project is under development.
 
@@ -38,9 +38,9 @@ path = "~/.ssh/my_other_keypair.private_key"
 $ ec2s list
 
 # show ec2 instances in the vpc
-$ ec2s list --vpc 'name'
+$ ec2s list -vpc-id vpc-xxxx
 
-$ ec2s list --vpcid vpc-xxxx
+$ ec2s list -vpc-name vpcname
 ```
 
 ## ssh subcommand
@@ -48,6 +48,10 @@ $ ec2s list --vpcid vpc-xxxx
 ```
 # login via ssh to the ec2 instance.
 $ ec2s ssh
+
+$ ec2s ssh -vpc-id vpc-xxxx
+
+$ ec2s ssh -vpc-name vpcname
 ```
 
 ## vpcs subcommand
