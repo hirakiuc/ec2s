@@ -63,3 +63,17 @@ func ShowError(err error) {
 		fmt.Println(err.Error())
 	}
 }
+
+func IsNetworkAccessible(instance *ec2.Instance) bool {
+	if *instance.State.Name != "running" {
+		fmt.Printf("The instance is not running. (%s)\n", *instance.InstanceID)
+		return false
+	}
+
+	if instance.PublicIPAddress == nil {
+		fmt.Printf("The instance does not have Public IPAddress. (%s)\n", *instance.InstanceID)
+		return false
+	}
+
+	return true
+}
