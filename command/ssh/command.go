@@ -29,9 +29,7 @@ func (c *Command) Help() string {
 
 func (c *Command) Run(args []string) int {
 	c.parseOptions(args)
-	instances, ret := c.choseInstance(
-		common.InstancesFilter(c),
-	)
+	instances, ret := c.choseInstance()
 	if ret != 0 {
 		return ret
 	}
@@ -64,6 +62,7 @@ func (c *Command) parseOptions(args []string) {
 
 	f := flag.NewFlagSet("ssh", flag.ExitOnError)
 	f.StringVar(&c.VpcId, "vpc-id", "", "vpc id")
+	f.StringVar(&c.VpcName, "vpc-name", "", "vpc name")
 	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
 	f.Parse(args)
 

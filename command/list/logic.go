@@ -34,7 +34,7 @@ func loadVpcCache() *cache.VpcCache {
 	}
 }
 
-func ShowEc2Instances(writer io.Writer, filter *ec2.DescribeInstancesInput) int {
+func ShowEc2Instances(writer io.Writer, options common.FilterInterface) int {
 	vpcCache := loadVpcCache()
 	if vpcCache == nil {
 		fmt.Println("failed to make vpc cache..")
@@ -43,8 +43,12 @@ func ShowEc2Instances(writer io.Writer, filter *ec2.DescribeInstancesInput) int 
 	instanceCache := cache.GetEc2InstanceCache()
 
 	service := common.Ec2Service()
-	res, err := service.DescribeInstances(filter)
+	params, err := options.InstancesFilter()
+	if err != nil {
+		return 1
+	}
 
+	res, err := service.DescribeInstances(params)
 	if err != nil {
 		fmt.Println("failed...")
 		common.ShowError(err)
