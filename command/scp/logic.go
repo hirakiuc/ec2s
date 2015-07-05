@@ -3,9 +3,10 @@ package scp
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"os/user"
+	"strconv"
 	"strings"
-	//	"os/exec"
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 
