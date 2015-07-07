@@ -10,8 +10,21 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 
+	"../../common"
 	"../../config"
 )
+
+func (c *Command) logCommand(instance *ec2.Instance, privateKeyPath *string, fromPath string, toPath string) {
+	logger := common.GetLogger()
+	conf := config.GetConfig()
+
+	logger.Info("scp -P %d -i %s %s %s\n",
+		conf.Ssh.Port,
+		*privateKeyPath,
+		fromPath,
+		toPath,
+	)
+}
 
 func (c *Command) execScp(instance *ec2.Instance) bool {
 	conf := config.GetConfig()
@@ -22,12 +35,17 @@ func (c *Command) execScp(instance *ec2.Instance) bool {
 		return false
 	}
 
+	fromPath := expandPath(c.FromPath, instance)
+	toPath := expandPath(c.ToPath, instance)
+
+	c.logCommand(instance, privateKeyPath, fromPath, toPath)
+
 	cmd := exec.Command(
 		"scp",
 		"-P", strconv.Itoa(conf.Ssh.Port),
 		"-i", *privateKeyPath,
-		expandPath(c.FromPath, instance),
-		expandPath(c.ToPath, instance),
+		fromPath,
+		toPath,
 	)
 
 	cmd.Stdin = os.Stdin

@@ -67,11 +67,14 @@ func (c *Command) parseOptions(args []string) {
 	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
 	f.Parse(args)
 
-	_, err := config.LoadConfig(configPath)
+	conf, err := config.LoadConfig(configPath)
 	if err != nil {
 		fmt.Printf("Can't load config file: %s, %v\n", configPath, err)
 		os.Exit(1)
 	}
+
+	logger := common.GetLogger()
+	logger.SetColored(conf.Common.ColorizedOutput)
 
 	if f.NArg() != 2 {
 		// TODO: show usage

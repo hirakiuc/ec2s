@@ -27,6 +27,9 @@ path = "~/.ssh/my_keypair.private_key"
 [[ssh.identity_file]]
 name = "my_other_keypair"
 path = "~/.ssh/my_other_keypair.private_key"
+
+[common]
+colorized_output = true
 ```
 
 # Usage
