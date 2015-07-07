@@ -11,7 +11,7 @@ import (
 	"../../config"
 )
 
-func execSsh(instance *ec2.Instance) bool {
+func (c *Command) execSsh(instance *ec2.Instance) bool {
 	conf := config.GetConfig()
 
 	privateKeyPath := (conf.Ssh).IdentityFileForName(*instance.KeyName)
@@ -26,6 +26,7 @@ func execSsh(instance *ec2.Instance) bool {
 		"-p", strconv.Itoa(conf.Ssh.Port),
 		"-i", *privateKeyPath,
 		*instance.PublicIPAddress,
+		c.Command,
 	)
 
 	cmd.Stdin = os.Stdin
