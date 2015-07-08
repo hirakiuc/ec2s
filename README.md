@@ -54,6 +54,14 @@ $ ec2s ssh -vpc-id vpc-xxxx
 $ ec2s ssh -vpc-name vpcname
 ```
 
+## scp subcommand
+
+```
+$ ec2s scp local ec2:/path/to
+
+$ ec2s scp ec2:/path/to local
+```
+
 ## vpcs subcommand
 
 ```

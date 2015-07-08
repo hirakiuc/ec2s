@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"./command/list"
+	"./command/scp"
 	"./command/ssh"
 	"./command/vpcs"
 
@@ -25,6 +26,9 @@ func main() {
 		},
 		"ssh": func() (cli.Command, error) {
 			return ssh.GetCommand(), nil
+		},
+		"scp": func() (cli.Command, error) {
+			return scp.GetCommand(), nil
 		},
 	}
 
