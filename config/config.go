@@ -1,18 +1,19 @@
 package config
 
 import (
-	"github.com/BurntSushi/toml"
 	"os"
 	"os/user"
 	"strings"
 
+	"github.com/BurntSushi/toml"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 type Config struct {
-	Aws  Aws
-	Peco Peco
-	Ssh  Ssh
+	Aws    Aws
+	Peco   Peco
+	Ssh    Ssh
+	Common Common
 }
 
 type Aws struct {
@@ -34,6 +35,10 @@ type Ssh struct {
 type IdentityFile struct {
 	Name string `toml:"name"`
 	Path string `toml:"path"`
+}
+
+type Common struct {
+	ColorizedOutput bool `toml:"colorized_output"`
 }
 
 var config Config

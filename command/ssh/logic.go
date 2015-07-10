@@ -8,8 +8,22 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 
+	"../../common"
 	"../../config"
 )
+
+func (c *Command) logCommand(instance *ec2.Instance, privateKeyPath *string) {
+	logger := common.GetLogger()
+	conf := config.GetConfig()
+
+	logger.Info("ssh -l %s -p %d -i %s %s %s\n",
+		conf.Ssh.User,
+		conf.Ssh.Port,
+		*privateKeyPath,
+		*instance.PublicIPAddress,
+		c.Command,
+	)
+}
 
 func (c *Command) execSsh(instance *ec2.Instance) bool {
 	conf := config.GetConfig()
@@ -19,6 +33,8 @@ func (c *Command) execSsh(instance *ec2.Instance) bool {
 		fmt.Printf("Can't find private key Path: %s\n", *instance.KeyName)
 		return false
 	}
+
+	c.logCommand(instance, privateKeyPath)
 
 	cmd := exec.Command(
 		"ssh",
