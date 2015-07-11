@@ -45,6 +45,7 @@ func ShowEc2Instances(writer io.Writer, options common.FilterInterface) int {
 	service := common.Ec2Service()
 	params, err := options.InstancesFilter()
 	if err != nil {
+		common.ShowError(err)
 		return 1
 	}
 
