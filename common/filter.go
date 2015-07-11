@@ -13,23 +13,50 @@ type InstanceFilter struct {
 type FilterInterface interface {
 	VpcFilter() (*ec2.Filter, error)
 	InstancesFilter() (*ec2.DescribeInstancesInput, error)
+	VpcFilterExist() bool
 }
 
-func (filter *InstanceFilter) vpcIdForFilter() (*string, error) {
-	if len(filter.VpcId) > 0 {
-		return &filter.VpcId, nil
-	}
+func (filter *InstanceFilter) VpcFilterExist() bool {
+	return (len(filter.VpcName) > 0 || len(filter.VpcId) > 0)
+}
 
-	if len(filter.VpcName) > 0 {
-		vpc, err := vpcByName(filter.VpcName)
-		if err != nil {
-			return nil, err
-		} else {
-			return vpc.VPCID, err
+func (filter *InstanceFilter) vpcDescribeParams() *ec2.DescribeVPCsInput {
+	if len(filter.VpcId) > 0 {
+		return &ec2.DescribeVPCsInput{
+			VPCIDs: []*string{
+				aws.String(filter.VpcId),
+			},
 		}
 	}
 
-	return nil, nil
+	if len(filter.VpcName) > 0 {
+		return &ec2.DescribeVPCsInput{
+			Filters: []*ec2.Filter{
+				{
+					Name: aws.String("tag:Name"),
+					Values: []*string{
+						aws.String(filter.VpcName),
+					},
+				},
+			},
+		}
+	}
+
+	return nil
+}
+
+func (filter *InstanceFilter) vpcIdForFilter() (*string, error) {
+	params := filter.vpcDescribeParams()
+	if params == nil {
+		return nil, nil // without vpc filter
+	}
+
+	vpcs, err := findVpcs(params)
+	if err != nil {
+		return nil, err
+	}
+
+	return vpcs[0].VPCID, nil
 }
 
 func (filter *InstanceFilter) VpcFilter() (*ec2.Filter, error) {
