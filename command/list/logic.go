@@ -1,7 +1,6 @@
 package list
 
 import (
-	"fmt"
 	"io"
 
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -37,7 +36,7 @@ func loadVpcCache() *cache.VpcCache {
 func ShowEc2Instances(writer io.Writer, options common.FilterInterface) int {
 	vpcCache := loadVpcCache()
 	if vpcCache == nil {
-		fmt.Println("failed to make vpc cache..")
+		logger.Error("failed to make vpc cache.\n")
 		return 10
 	}
 	instanceCache := cache.GetEc2InstanceCache()
@@ -51,7 +50,7 @@ func ShowEc2Instances(writer io.Writer, options common.FilterInterface) int {
 
 	res, err := service.DescribeInstances(params)
 	if err != nil {
-		fmt.Println("failed...")
+		logger.Error("failed to load EC2 instances.\n")
 		common.ShowError(err)
 		return 1
 	}

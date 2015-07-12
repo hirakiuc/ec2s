@@ -1,18 +1,24 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"./command/list"
 	"./command/scp"
 	"./command/ssh"
 	"./command/vpcs"
+	"./common"
 
 	"github.com/mitchellh/cli"
 )
 
 const VERSION string = "0.1.0"
+
+var logger *common.Logger
+
+func init() {
+	logger = common.GetLogger()
+}
 
 func main() {
 	c := cli.NewCLI("ec2s", VERSION)
@@ -34,7 +40,7 @@ func main() {
 
 	exitStatus, err := c.Run()
 	if err != nil {
-		fmt.Println(err)
+		logger.Error(err.Error())
 	}
 	os.Exit(exitStatus)
 }

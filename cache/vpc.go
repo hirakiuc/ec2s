@@ -2,7 +2,6 @@ package cache
 
 import (
 	"../common"
-	"fmt"
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
@@ -12,6 +11,11 @@ type VpcCache struct {
 }
 
 var vpcCache *VpcCache
+var logger *common.Logger
+
+func init() {
+	logger = common.GetLogger()
+}
 
 func GetVpcCache() *VpcCache {
 	if vpcCache == nil {
@@ -35,7 +39,7 @@ func (cache *VpcCache) MakeCache() bool {
 	service := common.Ec2Service()
 	res, err := service.DescribeVPCs(nil)
 	if err != nil {
-		fmt.Println("failed to make vpcs cache.")
+		logger.Error("failed to make vpcs cache.\n")
 		common.ShowError(err)
 		return false
 	}

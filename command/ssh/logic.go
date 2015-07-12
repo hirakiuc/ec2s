@@ -1,7 +1,6 @@
 package ssh
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
@@ -30,7 +29,7 @@ func (c *Command) execSsh(instance *ec2.Instance) bool {
 
 	privateKeyPath := (conf.Ssh).IdentityFileForName(*instance.KeyName)
 	if privateKeyPath == nil {
-		fmt.Printf("Can't find private key Path: %s\n", *instance.KeyName)
+		logger.Error("Can't find private key Path: %s\n", *instance.KeyName)
 		return false
 	}
 
@@ -51,7 +50,7 @@ func (c *Command) execSsh(instance *ec2.Instance) bool {
 
 	err := cmd.Start()
 	if err != nil {
-		fmt.Printf("err: %v\n", err)
+		logger.Error("failed to execute command: %v\n", err)
 		return false
 	}
 

@@ -2,7 +2,6 @@ package common
 
 import (
 	"../config"
-	"fmt"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -46,26 +45,26 @@ func ShowError(err error) {
 	if awsErr, ok := err.(awserr.Error); ok {
 		if reqErr, ok := err.(awserr.RequestFailure); ok {
 			// A service error occurred
-			fmt.Println(reqErr.Code(), reqErr.Message(), reqErr.StatusCode(), reqErr.RequestID())
+			logger.Error(reqErr.Code(), reqErr.Message(), reqErr.StatusCode(), reqErr.RequestID())
 		} else {
 			// Generic AWS Error with Code, Message, and original error (if any)
-			fmt.Println(awsErr.Code(), awsErr.Message(), awsErr.OrigErr())
+			logger.Error(awsErr.Code(), awsErr.Message(), awsErr.OrigErr())
 		}
 	} else {
 		// This case should never be hit, the SDK should always return an error
 		// which satisfies the awserr.Error interface.
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 	}
 }
 
 func IsNetworkAccessible(instance *ec2.Instance) bool {
 	if *instance.State.Name != "running" {
-		fmt.Printf("The instance is not running. (%s)\n", *instance.InstanceID)
+		logger.Warn("Instance(%s) is not running.\n", *instance.InstanceID)
 		return false
 	}
 
 	if instance.PublicIPAddress == nil {
-		fmt.Printf("The instance does not have Public IPAddress. (%s)\n", *instance.InstanceID)
+		logger.Warn("Instance(%s) does not have Public IPAddress.\n", *instance.InstanceID)
 		return false
 	}
 

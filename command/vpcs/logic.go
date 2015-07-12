@@ -1,7 +1,6 @@
 package vpcs
 
 import (
-	"fmt"
 	"io"
 
 	"../../common"
@@ -12,7 +11,7 @@ func (c *Command) showVpcs(writer io.Writer) int {
 	service := common.Ec2Service()
 	res, err := service.DescribeVPCs(nil)
 	if err != nil {
-		fmt.Println("failed...")
+		logger.Error("failed to fetch vpcs: %v\n")
 		common.ShowError(err)
 		return 1
 	}
