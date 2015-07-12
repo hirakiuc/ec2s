@@ -2,7 +2,6 @@ package list
 
 import (
 	"flag"
-	"fmt"
 	"os"
 
 	"../../common"
@@ -11,6 +10,12 @@ import (
 
 type Command struct {
 	*common.InstanceFilter
+}
+
+var logger *common.Logger
+
+func init() {
+	logger = common.GetLogger()
 }
 
 func GetCommand() *Command {
@@ -45,7 +50,7 @@ func (c *Command) parseOptions(args []string) {
 
 	_, err := config.LoadConfig(configPath)
 	if err != nil {
-		fmt.Printf("Can't load config file: %s, %v\n", configPath, err)
+		logger.Error("Can't load config file: %s, %v\n", configPath, err)
 		os.Exit(1)
 	}
 }
