@@ -2,7 +2,6 @@ package ssh
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"strings"
 
@@ -16,6 +15,12 @@ import (
 type Command struct {
 	*common.InstanceFilter
 	Command string
+}
+
+var logger *common.Logger
+
+func init() {
+	logger = common.GetLogger()
 }
 
 func GetCommand() *Command {
@@ -49,7 +54,7 @@ func (c *Command) Run(args []string) int {
 	}
 
 	if len(instances) > 1 {
-		fmt.Println("WARN: ssh subcommand only use first selection.")
+		logger.Warn("ssh subcommand only use first selection.\n")
 	}
 
 	instance := instances[0]
@@ -79,7 +84,7 @@ func (c *Command) parseOptions(args []string) {
 
 	conf, err := config.LoadConfig(configPath)
 	if err != nil {
-		fmt.Printf("Can't load config file: %s, %v\n", configPath, err)
+		logger.Error("Can't load config file: %s, %v\n", configPath, err)
 		os.Exit(1)
 	}
 
@@ -93,7 +98,7 @@ func (c *Command) parseOptions(args []string) {
 
 func (c *Command) execSshLogin(instances []*ec2.Instance) int {
 	if len(instances) > 1 {
-		fmt.Println("WARN: ssh subcommand only use first selection.")
+		logger.Warn("ssh subcommand only use first selection.\n")
 	}
 
 	instance := instances[0]

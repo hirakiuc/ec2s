@@ -16,6 +16,12 @@ type Command struct {
 	ToPath   string
 }
 
+var logger *common.Logger
+
+func init() {
+	logger = common.GetLogger()
+}
+
 func GetCommand() *Command {
 	return &Command{
 		InstanceFilter: &common.InstanceFilter{
@@ -45,7 +51,7 @@ func (c *Command) Run(args []string) int {
 
 	for _, instance := range instances {
 		if common.IsNetworkAccessible(instance) == false {
-			fmt.Printf("%s is not reachable.\n", *instance.InstanceID)
+			logger.Warn("%s is not reachable.\n", *instance.InstanceID)
 		} else {
 			c.execScp(instance)
 		}
@@ -65,11 +71,15 @@ func (c *Command) parseOptions(args []string) {
 	f.StringVar(&c.VpcId, "vpc-id", "", "vpc id")
 	f.StringVar(&c.VpcName, "vpc-name", "", "vpc name")
 	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
+	f.Usage = func() {
+		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
+		f.PrintDefaults()
+	}
 	f.Parse(args)
 
 	conf, err := config.LoadConfig(configPath)
 	if err != nil {
-		fmt.Printf("Can't load config file: %s, %v\n", configPath, err)
+		logger.Error("Can't load config file: %s, %v\n", configPath, err)
 		os.Exit(1)
 	}
 
@@ -77,8 +87,7 @@ func (c *Command) parseOptions(args []string) {
 	logger.SetColored(conf.Common.ColorizedOutput)
 
 	if f.NArg() != 2 {
-		// TODO: show usage
-		fmt.Printf("[usage] ec2s ssh from_path to_path\n")
+		f.Usage()
 		os.Exit(1)
 	}
 
