@@ -53,7 +53,7 @@ func ShowError(err error) {
 	} else {
 		// This case should never be hit, the SDK should always return an error
 		// which satisfies the awserr.Error interface.
-		logger.Error(err.Error())
+		logger.Error("%s\n", err.Error())
 	}
 }
 
