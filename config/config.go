@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"os/user"
 	"strings"
@@ -72,12 +73,12 @@ func (c *Config) AwsCredentials() *credentials.Credentials {
 		"")
 }
 
-func (ssh *Ssh) IdentityFileForName(name string) *string {
+func (ssh *Ssh) IdentityFileForName(name string) (*string, error) {
 	for _, identityFile := range ssh.IdentityFiles {
 		if identityFile.Name == name {
-			return &identityFile.Path
+			return &identityFile.Path, nil
 		}
 	}
 
-	return nil
+	return nil, fmt.Errorf("Can't find IdentityFile for %s", name)
 }

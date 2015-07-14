@@ -24,35 +24,32 @@ func vpcId(instance *ec2.Instance) string {
 	}
 }
 
-func loadVpcCache() *cache.VpcCache {
+func loadVpcCache() (*cache.VpcCache, error) {
 	cache := cache.GetVpcCache()
-	if cache.MakeCache() == false {
-		return nil
+	if err := cache.MakeCache(); err != nil {
+		return nil, err
 	} else {
-		return cache
+		return cache, nil
 	}
 }
 
-func ShowEc2Instances(writer io.Writer, options common.FilterInterface) int {
-	vpcCache := loadVpcCache()
-	if vpcCache == nil {
-		logger.Error("failed to make vpc cache.\n")
-		return 10
+func ShowEc2Instances(writer io.Writer, options common.FilterInterface) error {
+	vpcCache, err := loadVpcCache()
+	if err != nil {
+		return err
 	}
 	instanceCache := cache.GetEc2InstanceCache()
 
 	service := common.Ec2Service()
 	params, err := options.InstancesFilter()
 	if err != nil {
-		common.ShowError(err)
-		return 1
+		return err
 	}
 
 	res, err := service.DescribeInstances(params)
 	if err != nil {
 		logger.Error("failed to load EC2 instances.\n")
-		common.ShowError(err)
-		return 1
+		return err
 	}
 
 	table := common.NewTableWriter(writer)
@@ -71,5 +68,5 @@ func ShowEc2Instances(writer io.Writer, options common.FilterInterface) int {
 	}
 
 	table.Render()
-	return 0
+	return nil
 }

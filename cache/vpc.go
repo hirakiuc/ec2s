@@ -35,17 +35,16 @@ func (cache *VpcCache) WriteEntry(vpcId string, vpc *ec2.VPC) {
 	cache.Entries[vpcId] = vpc
 }
 
-func (cache *VpcCache) MakeCache() bool {
+func (cache *VpcCache) MakeCache() error {
 	service := common.Ec2Service()
 	res, err := service.DescribeVPCs(nil)
 	if err != nil {
 		logger.Error("failed to make vpcs cache.\n")
-		common.ShowError(err)
-		return false
+		return err
 	}
 
 	for _, vpc := range res.VPCs {
 		cache.WriteEntry(*vpc.VPCID, vpc)
 	}
-	return true
+	return nil
 }

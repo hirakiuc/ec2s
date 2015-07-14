@@ -24,13 +24,12 @@ func (c *Command) logCommand(instance *ec2.Instance, privateKeyPath *string) {
 	)
 }
 
-func (c *Command) execSsh(instance *ec2.Instance) bool {
+func (c *Command) execSsh(instance *ec2.Instance) error {
 	conf := config.GetConfig()
 
-	privateKeyPath := (conf.Ssh).IdentityFileForName(*instance.KeyName)
-	if privateKeyPath == nil {
-		logger.Error("Can't find private key Path: %s\n", *instance.KeyName)
-		return false
+	privateKeyPath, err := (conf.Ssh).IdentityFileForName(*instance.KeyName)
+	if err != nil {
+		return err
 	}
 
 	c.logCommand(instance, privateKeyPath)
@@ -48,12 +47,12 @@ func (c *Command) execSsh(instance *ec2.Instance) bool {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	err := cmd.Start()
+	err = cmd.Start()
 	if err != nil {
-		logger.Error("failed to execute command: %v\n", err)
-		return false
+		logger.Error("failed to execute command.\n", err)
+		return err
 	}
 
 	cmd.Wait()
-	return true
+	return nil
 }

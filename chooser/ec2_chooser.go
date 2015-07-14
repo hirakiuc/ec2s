@@ -37,12 +37,11 @@ func ec2instance(line string) *ec2.Instance {
 	return instance
 }
 
-// TODO return error, not int.
-func ChooseEc2Instances(options common.FilterInterface) ([]*ec2.Instance, int) {
+func ChooseEc2Instances(options common.FilterInterface) ([]*ec2.Instance, error) {
 	buffer := bytes.NewBuffer(nil)
-	ret := list.ShowEc2Instances(buffer, options)
-	if ret != 0 {
-		return []*ec2.Instance{}, ret
+	err := list.ShowEc2Instances(buffer, options)
+	if err != nil {
+		return []*ec2.Instance{}, err
 	}
 
 	conf := config.GetConfig()
@@ -54,8 +53,8 @@ func ChooseEc2Instances(options common.FilterInterface) ([]*ec2.Instance, int) {
 
 	output, err := pipe.CombinedOutput(p)
 	if err != nil {
-		logger.Error("Command failed: %v\n", err)
-		return []*ec2.Instance{}, 1
+		logger.Error("Command failed.\n", err)
+		return []*ec2.Instance{}, err
 	}
 
 	// parse line
@@ -69,5 +68,5 @@ func ChooseEc2Instances(options common.FilterInterface) ([]*ec2.Instance, int) {
 		}
 	}
 
-	return instances, 0
+	return instances, nil
 }
