@@ -38,33 +38,40 @@ func (c *Command) Help() string {
 }
 
 func (c *Command) Run(args []string) int {
-	c.parseOptions(args)
+	if err := c.parseOptions(args); err != nil {
+		common.ShowError(err)
+		return 1
+	}
 
-	instances, ret := chooser.ChooseEc2Instances(c)
-	if ret != 0 {
-		return ret
+	instances, err := chooser.ChooseEc2Instances(c)
+	if err != nil {
+		common.ShowError(err)
+		return 1
 	}
 
 	if len(instances) == 0 {
 		return 0
 	}
 
+	cnt := 0
 	for _, instance := range instances {
-		if common.IsNetworkAccessible(instance) == false {
-			logger.Warn("%s is not reachable.\n", *instance.InstanceID)
-		} else {
-			c.execScp(instance)
+		if common.IsNetworkAccessible(instance) == true {
+			if err := c.execScp(instance); err != nil {
+				logger.Error("failed to scp.\n")
+				common.ShowError(err)
+				cnt += 1
+			}
 		}
 	}
 
-	return 0
+	return cnt
 }
 
 func (c *Command) Synopsis() string {
 	return "scp from/to instance"
 }
 
-func (c *Command) parseOptions(args []string) {
+func (c *Command) parseOptions(args []string) error {
 	var configPath string
 
 	f := flag.NewFlagSet("scp", flag.ExitOnError)
@@ -79,8 +86,8 @@ func (c *Command) parseOptions(args []string) {
 
 	conf, err := config.LoadConfig(configPath)
 	if err != nil {
-		logger.Error("Can't load config file: %s, %v\n", configPath, err)
-		os.Exit(1)
+		logger.Error("Can't load config file.\n")
+		return err
 	}
 
 	logger := common.GetLogger()
@@ -88,9 +95,11 @@ func (c *Command) parseOptions(args []string) {
 
 	if f.NArg() != 2 {
 		f.Usage()
-		os.Exit(1)
+		os.Exit(1) // TODO: fix to return error.
 	}
 
 	c.FromPath = f.Arg(0)
 	c.ToPath = f.Arg(1)
+
+	return nil
 }

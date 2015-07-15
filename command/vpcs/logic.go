@@ -7,13 +7,12 @@ import (
 	"../../formatter"
 )
 
-func (c *Command) showVpcs(writer io.Writer) int {
+func (c *Command) showVpcs(writer io.Writer) error {
 	service := common.Ec2Service()
 	res, err := service.DescribeVPCs(nil)
 	if err != nil {
-		logger.Error("failed to fetch vpcs: %v\n")
-		common.ShowError(err)
-		return 1
+		logger.Error("failed to fetch vpcs.\n")
+		return err
 	}
 
 	table := common.NewTableWriter(writer)
@@ -24,5 +23,5 @@ func (c *Command) showVpcs(writer io.Writer) int {
 	}
 
 	table.Render()
-	return 0
+	return nil
 }

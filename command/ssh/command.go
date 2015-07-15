@@ -2,7 +2,6 @@ package ssh
 
 import (
 	"flag"
-	"os"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -37,10 +36,15 @@ func (c *Command) Help() string {
 }
 
 func (c *Command) Run(args []string) int {
-	c.parseOptions(args)
-	instances, ret := chooser.ChooseEc2Instances(c)
-	if ret != 0 {
-		return ret
+	if err := c.parseOptions(args); err != nil {
+		common.ShowError(err)
+		return 1
+	}
+
+	instances, err := chooser.ChooseEc2Instances(c)
+	if err != nil {
+		common.ShowError(err)
+		return 1
 	}
 
 	if len(instances) == 0 {
@@ -62,7 +66,8 @@ func (c *Command) Run(args []string) int {
 		return 1
 	}
 
-	if c.execSsh(instances[0]) == false {
+	if err := c.execSsh(instances[0]); err != nil {
+		common.ShowError(err)
 		return 1
 	} else {
 		return 0
@@ -73,7 +78,7 @@ func (c *Command) Synopsis() string {
 	return "ssh to instance"
 }
 
-func (c *Command) parseOptions(args []string) {
+func (c *Command) parseOptions(args []string) error {
 	var configPath string
 
 	f := flag.NewFlagSet("ssh", flag.ExitOnError)
@@ -84,8 +89,8 @@ func (c *Command) parseOptions(args []string) {
 
 	conf, err := config.LoadConfig(configPath)
 	if err != nil {
-		logger.Error("Can't load config file: %s, %v\n", configPath, err)
-		os.Exit(1)
+		logger.Error("Can't load config file.\n")
+		return err
 	}
 
 	logger := common.GetLogger()
@@ -94,6 +99,8 @@ func (c *Command) parseOptions(args []string) {
 	if f.NArg() > 0 {
 		c.Command = strings.Join(f.Args(), " ")
 	}
+
+	return nil
 }
 
 func (c *Command) execSshLogin(instances []*ec2.Instance) int {
@@ -106,7 +113,8 @@ func (c *Command) execSshLogin(instances []*ec2.Instance) int {
 		return 1
 	}
 
-	if c.execSsh(instances[0]) == false {
+	if err := c.execSsh(instances[0]); err != nil {
+		common.ShowError(err)
 		return 1
 	} else {
 		return 0
@@ -118,7 +126,8 @@ func (c *Command) execSshCommand(instances []*ec2.Instance) int {
 
 	for _, instance := range instances {
 		if common.IsNetworkAccessible(instance) == true {
-			if c.execSsh(instance) == false {
+			if err := c.execSsh(instance); err != nil {
+				common.ShowError(err)
 				ret = ret + 1
 			}
 		}
