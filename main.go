@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	"./command/elbs"
 	"./command/list"
 	"./command/scp"
 	"./command/ssh"
@@ -29,6 +30,9 @@ func main() {
 		},
 		"vpcs": func() (cli.Command, error) {
 			return vpcs.GetCommand(), nil
+		},
+		"elbs": func() (cli.Command, error) {
+			return elbs.GetCommand(), nil
 		},
 		"ssh": func() (cli.Command, error) {
 			return ssh.GetCommand(), nil
