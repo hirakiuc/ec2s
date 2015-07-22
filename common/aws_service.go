@@ -6,7 +6,19 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go/service/elb"
 )
+
+func ElbService() *elb.ELB {
+	conf := config.GetConfig()
+
+	return elb.New(
+		&aws.Config{
+			Region:      conf.Aws.Region,
+			Credentials: conf.AwsCredentials(),
+		},
+	)
+}
 
 func Ec2Service() *ec2.EC2 {
 	conf := config.GetConfig()

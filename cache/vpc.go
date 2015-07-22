@@ -48,3 +48,18 @@ func (cache *VpcCache) MakeCache() error {
 	}
 	return nil
 }
+
+func (cache *VpcCache) VpcName(vpcId string) *string {
+	vpc := cache.ReadEntry(vpcId)
+	if vpc == nil {
+		return nil
+	}
+
+	for _, t := range vpc.Tags {
+		if *t.Key == "Name" {
+			return t.Value
+		}
+	}
+
+	return nil
+}
