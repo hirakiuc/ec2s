@@ -6,18 +6,22 @@ import (
 )
 
 type InstanceFilter struct {
-	VpcId   string
-	VpcName string
+	VpcId       string
+	VpcName     string
+	Elbname     string
+	InstanceIds []string
 }
 
 type FilterInterface interface {
-	VpcFilter() (*ec2.Filter, error)
 	InstancesFilter() (*ec2.DescribeInstancesInput, error)
-	VpcFilterExist() bool
 }
 
-func (filter *InstanceFilter) VpcFilterExist() bool {
+func (filter *InstanceFilter) vpcFilterExist() bool {
 	return (len(filter.VpcName) > 0 || len(filter.VpcId) > 0)
+}
+
+func (filter *InstanceFilter) instanceIdsFilterExist() bool {
+	return (len(filter.InstanceIds) > 0)
 }
 
 func (filter *InstanceFilter) vpcDescribeParams() *ec2.DescribeVPCsInput {
@@ -59,7 +63,7 @@ func (filter *InstanceFilter) vpcIdForFilter() (*string, error) {
 	return vpcs[0].VPCID, nil
 }
 
-func (filter *InstanceFilter) VpcFilter() (*ec2.Filter, error) {
+func (filter *InstanceFilter) vpcFilter() (*ec2.Filter, error) {
 	vpcId, err := filter.vpcIdForFilter()
 	if err != nil {
 		return nil, err
@@ -78,10 +82,9 @@ func (filter *InstanceFilter) VpcFilter() (*ec2.Filter, error) {
 }
 
 func (filter *InstanceFilter) InstancesFilter() (*ec2.DescribeInstancesInput, error) {
-	//func InstancesFilter(options FilterInterface) *ec2.DescribeInstancesInput {
 	filters := []*ec2.Filter{}
 
-	vpcFilter, err := filter.VpcFilter()
+	vpcFilter, err := filter.vpcFilter()
 	if err != nil {
 		return nil, err
 	}
