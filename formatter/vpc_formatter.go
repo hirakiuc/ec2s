@@ -11,6 +11,10 @@ func NewVpcFormatter() *VpcFormatter {
 }
 
 func nameOfVpc(vpc *ec2.VPC) string {
+	if vpc == nil {
+		return UNDEFINED
+	}
+
 	for _, t := range vpc.Tags {
 		if *t.Key == "Name" {
 			return *t.Value
