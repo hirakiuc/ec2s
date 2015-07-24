@@ -7,6 +7,7 @@ import (
 
 	"../../cache"
 	"../../common"
+	"../../filter"
 	"../../formatter"
 )
 
@@ -33,7 +34,7 @@ func loadVpcCache() (*cache.VpcCache, error) {
 	}
 }
 
-func ShowEc2Instances(writer io.Writer, options common.FilterInterface) error {
+func ShowEc2Instances(writer io.Writer, options filter.FilterInterface) error {
 	vpcCache, err := loadVpcCache()
 	if err != nil {
 		return err

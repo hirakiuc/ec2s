@@ -1,14 +1,16 @@
-package common
+package filter
 
 import (
+	"../common"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-type InstanceFilter struct {
+type Filter struct {
 	VpcId       string
 	VpcName     string
-	Elbname     string
+	ElbName     string
 	InstanceIds []string
 }
 
@@ -16,15 +18,15 @@ type FilterInterface interface {
 	InstancesFilter() (*ec2.DescribeInstancesInput, error)
 }
 
-func (filter *InstanceFilter) vpcFilterExist() bool {
+func (filter *Filter) vpcFilterExist() bool {
 	return (len(filter.VpcName) > 0 || len(filter.VpcId) > 0)
 }
 
-func (filter *InstanceFilter) instanceIdsFilterExist() bool {
+func (filter *Filter) instanceIdsFilterExist() bool {
 	return (len(filter.InstanceIds) > 0)
 }
 
-func (filter *InstanceFilter) vpcDescribeParams() *ec2.DescribeVPCsInput {
+func (filter *Filter) vpcDescribeParams() *ec2.DescribeVPCsInput {
 	if len(filter.VpcId) > 0 {
 		return &ec2.DescribeVPCsInput{
 			VPCIDs: []*string{
@@ -49,13 +51,13 @@ func (filter *InstanceFilter) vpcDescribeParams() *ec2.DescribeVPCsInput {
 	return nil
 }
 
-func (filter *InstanceFilter) vpcIdForFilter() (*string, error) {
+func (filter *Filter) vpcIdForFilter() (*string, error) {
 	params := filter.vpcDescribeParams()
 	if params == nil {
 		return nil, nil // without vpc filter
 	}
 
-	vpcs, err := findVpcs(params)
+	vpcs, err := common.FindVpcs(params)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +65,7 @@ func (filter *InstanceFilter) vpcIdForFilter() (*string, error) {
 	return vpcs[0].VPCID, nil
 }
 
-func (filter *InstanceFilter) vpcFilter() (*ec2.Filter, error) {
+func (filter *Filter) vpcFilter() (*ec2.Filter, error) {
 	vpcId, err := filter.vpcIdForFilter()
 	if err != nil {
 		return nil, err
@@ -81,7 +83,7 @@ func (filter *InstanceFilter) vpcFilter() (*ec2.Filter, error) {
 	}, nil
 }
 
-func (filter *InstanceFilter) InstancesFilter() (*ec2.DescribeInstancesInput, error) {
+func (filter *Filter) InstancesFilter() (*ec2.DescribeInstancesInput, error) {
 	filters := []*ec2.Filter{}
 
 	vpcFilter, err := filter.vpcFilter()

@@ -9,10 +9,11 @@ import (
 	"../../chooser"
 	"../../common"
 	"../../config"
+	"../../filter"
 )
 
 type Command struct {
-	*common.InstanceFilter
+	*filter.Filter
 	Command string
 }
 
@@ -24,7 +25,7 @@ func init() {
 
 func GetCommand() *Command {
 	return &Command{
-		InstanceFilter: &common.InstanceFilter{
+		Filter: &filter.Filter{
 			VpcId: "",
 		},
 		Command: "",
