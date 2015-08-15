@@ -1,8 +1,10 @@
-package common
+package filter
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
+
+	"../common"
 )
 
 type InstanceFilter struct {
@@ -51,7 +53,7 @@ func (filter *InstanceFilter) vpcIdForFilter() (*string, error) {
 		return nil, nil // without vpc filter
 	}
 
-	vpcs, err := findVpcs(params)
+	vpcs, err := common.FindVpcs(params)
 	if err != nil {
 		return nil, err
 	}

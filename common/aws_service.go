@@ -31,7 +31,7 @@ func Ec2Service() *ec2.EC2 {
 	)
 }
 
-func findVpcs(params *ec2.DescribeVPCsInput) ([]*ec2.VPC, error) {
+func FindVpcs(params *ec2.DescribeVPCsInput) ([]*ec2.VPC, error) {
 	service := Ec2Service()
 
 	res, err := service.DescribeVPCs(params)

@@ -11,6 +11,7 @@ import (
 	"../command/list"
 	"../common"
 	"../config"
+	"../filter"
 )
 
 var logger *common.Logger
@@ -37,7 +38,7 @@ func ec2instance(line string) *ec2.Instance {
 	return instance
 }
 
-func ChooseEc2Instances(options common.FilterInterface) ([]*ec2.Instance, error) {
+func ChooseEc2Instances(options filter.FilterInterface) ([]*ec2.Instance, error) {
 	buffer := bytes.NewBuffer(nil)
 	err := list.ShowEc2Instances(buffer, options)
 	if err != nil {
