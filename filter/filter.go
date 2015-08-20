@@ -80,7 +80,6 @@ func (filter *InstanceFilter) VpcFilter() (*ec2.Filter, error) {
 }
 
 func (filter *InstanceFilter) InstancesFilter() (*ec2.DescribeInstancesInput, error) {
-	//func InstancesFilter(options FilterInterface) *ec2.DescribeInstancesInput {
 	filters := []*ec2.Filter{}
 
 	vpcFilter, err := filter.VpcFilter()
