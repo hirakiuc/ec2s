@@ -1,0 +1,9 @@
+dependencies:
+  pre:
+    - go get github.com/mattn/gom
+    - gom install
+    - go get -u github.com/aws-sdk-go/...
+
+test:
+  override:
+    - gom build
