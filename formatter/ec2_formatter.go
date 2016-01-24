@@ -19,19 +19,32 @@ func nameOfInstance(instance *ec2.Instance) string {
 	return UNDEFINED
 }
 
+func vpcName(vpc *ec2.Vpc) string {
+	if vpc == nil {
+		return UNDEFINED
+	}
+
+	for _, t := range vpc.Tags {
+		if *t.Key == "Name" {
+			return *t.Value
+		}
+	}
+	return UNDEFINED
+}
+
 func ipAddress(instance *ec2.Instance) string {
-	if instance.PublicIPAddress != nil {
-		return *instance.PublicIPAddress
+	if instance.PublicIpAddress != nil {
+		return *instance.PublicIpAddress
 	} else {
 		return UNDEFINED
 	}
 }
 
-func (formatter *Ec2Formatter) Format(vpc *ec2.VPC, instance *ec2.Instance) []string {
+func (formatter *Ec2Formatter) Format(vpc *ec2.Vpc, instance *ec2.Instance) []string {
 	return []string{
 		nameOfVpc(vpc),
 		nameOfInstance(instance),
-		*instance.InstanceID,
+		*instance.InstanceId,
 		*instance.InstanceType,
 		*instance.Placement.AvailabilityZone,
 		ipAddress(instance),

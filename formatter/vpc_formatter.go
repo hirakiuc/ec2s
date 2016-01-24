@@ -10,7 +10,7 @@ func NewVpcFormatter() *VpcFormatter {
 	return &VpcFormatter{}
 }
 
-func nameOfVpc(vpc *ec2.VPC) string {
+func nameOfVpc(vpc *ec2.Vpc) string {
 	if vpc == nil {
 		return UNDEFINED
 	}
@@ -23,10 +23,10 @@ func nameOfVpc(vpc *ec2.VPC) string {
 	return UNDEFINED
 }
 
-func (formatter *VpcFormatter) Format(vpc *ec2.VPC) []string {
+func (formatter *VpcFormatter) Format(vpc *ec2.Vpc) []string {
 	return []string{
 		nameOfVpc(vpc),
-		*vpc.VPCID,
+		*vpc.VpcId,
 		*vpc.State,
 	}
 }

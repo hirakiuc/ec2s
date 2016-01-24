@@ -5,6 +5,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/elb"
 )
@@ -24,33 +25,34 @@ func Ec2Service() *ec2.EC2 {
 	conf := config.GetConfig()
 
 	return ec2.New(
+		session.New(),
 		&aws.Config{
-			Region:      conf.Aws.Region,
+			Region:      aws.String(conf.Aws.Region),
 			Credentials: conf.AwsCredentials(),
 		},
 	)
 }
 
-func findVpcs(params *ec2.DescribeVPCsInput) ([]*ec2.VPC, error) {
+func findVpcs(params *ec2.DescribeVpcsInput) ([]*ec2.Vpc, error) {
 	service := Ec2Service()
 
-	res, err := service.DescribeVPCs(params)
+	res, err := service.DescribeVpcs(params)
 	if err != nil {
 		// With vpcid request, aws-sdk return error with 'InvalidVpcID.NotFound'.
 		if awsErr, ok := err.(awserr.Error); ok {
 			if awsErr.Code() == "InvalidVpcID.NotFound" {
-				return []*ec2.VPC{}, &VpcNotFoundError{}
+				return []*ec2.Vpc{}, &VpcNotFoundError{}
 			}
 		}
 
-		return []*ec2.VPC{}, err
+		return []*ec2.Vpc{}, err
 	}
 
-	if len(res.VPCs) == 0 {
-		return []*ec2.VPC{}, &VpcNotFoundError{}
+	if len(res.Vpcs) == 0 {
+		return []*ec2.Vpc{}, &VpcNotFoundError{}
 	}
 
-	return res.VPCs, nil
+	return res.Vpcs, nil
 }
 
 func ShowError(err error) {
@@ -71,12 +73,12 @@ func ShowError(err error) {
 
 func IsNetworkAccessible(instance *ec2.Instance) bool {
 	if *instance.State.Name != "running" {
-		logger.Warn("Instance(%s) is not running.\n", *instance.InstanceID)
+		logger.Warn("Instance(%s) is not running.\n", *instance.InstanceId)
 		return false
 	}
 
-	if instance.PublicIPAddress == nil {
-		logger.Warn("Instance(%s) does not have Public IPAddress.\n", *instance.InstanceID)
+	if instance.PublicIpAddress == nil {
+		logger.Warn("Instance(%s) does not have Public IPAddress.\n", *instance.InstanceId)
 		return false
 	}
 

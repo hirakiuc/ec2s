@@ -19,7 +19,7 @@ func (c *Command) logCommand(instance *ec2.Instance, privateKeyPath *string) {
 		conf.Ssh.User,
 		conf.Ssh.Port,
 		*privateKeyPath,
-		*instance.PublicIPAddress,
+		*instance.PublicIpAddress,
 		c.Command,
 	)
 }
@@ -39,7 +39,7 @@ func (c *Command) execSsh(instance *ec2.Instance) error {
 		"-l", conf.Ssh.User,
 		"-p", strconv.Itoa(conf.Ssh.Port),
 		"-i", *privateKeyPath,
-		*instance.PublicIPAddress,
+		*instance.PublicIpAddress,
 		c.Command,
 	)
 

@@ -9,7 +9,7 @@ import (
 
 func (c *Command) showVpcs(writer io.Writer) error {
 	service := common.Ec2Service()
-	res, err := service.DescribeVPCs(nil)
+	res, err := service.DescribeVpcs(nil)
 	if err != nil {
 		logger.Error("failed to fetch vpcs.\n")
 		return err
@@ -18,7 +18,7 @@ func (c *Command) showVpcs(writer io.Writer) error {
 	table := common.NewTableWriter(writer)
 	formatter := formatter.NewVpcFormatter()
 
-	for _, vpc := range res.VPCs {
+	for _, vpc := range res.Vpcs {
 		table.Append(formatter.Format(vpc))
 	}
 

@@ -1,0 +1,13 @@
+gom 'github.com/aws/aws-sdk-go', :tag => 'v1.0.11'
+gom 'github.com/vaughan0/go-ini', :commit => 'a98ad7ee00ec53921f08832bc06ecf7fd600e6a1'
+gom 'github.com/olekukonko/tablewriter', :commit => 'cca8bbc0798408af109aaaa239cbd2634846b340'
+gom 'github.com/mgutz/ansi/cmd/ansi-mgutz', :commit => 'c286dcecd19ff979eeb73ea444e479b903f2cfcb'
+
+gom 'github.com/mitchellh/cli', :commit => 'cb6853d606ea4a12a15ac83cc43503df99fd28fb'
+gom 'github.com/BurntSushi/toml', :commit => '5c4df71dfe9ac89ef6287afc05e4c1b16ae65a1e'
+
+gom 'gopkg.in/pipe.v2'
+
+group :development, :test do
+  gom 'github.com/k0kubun/pp'
+end
