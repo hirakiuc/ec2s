@@ -4,7 +4,7 @@ EC2 instance operation tool with ssh, peco.
 
 WARNING: This project is under development.
 
-# Configure
+## Configure
 
 ```
 $ cat ~/.ec2s
@@ -32,9 +32,9 @@ path = "~/.ssh/my_other_keypair.private_key"
 colorized_output = true
 ```
 
-# Usage
+## Usage
 
-## list subcommand
+### list subcommand
 
 ```
 # show ec2 instances
@@ -46,7 +46,7 @@ $ ec2s list -vpc-id vpc-xxxx
 $ ec2s list -vpc-name vpcname
 ```
 
-## ssh subcommand
+### ssh subcommand
 
 ```
 # login via ssh to the ec2 instance.
@@ -57,7 +57,7 @@ $ ec2s ssh -vpc-id vpc-xxxx
 $ ec2s ssh -vpc-name vpcname
 ```
 
-## scp subcommand
+### scp subcommand
 
 ```
 $ ec2s scp local ec2:/path/to
@@ -65,11 +65,23 @@ $ ec2s scp local ec2:/path/to
 $ ec2s scp ec2:/path/to local
 ```
 
-## vpcs subcommand
+### vpcs subcommand
 
 ```
 # show vpcs
 $ ec2s vpcs
+```
+
+## HowToBuild
+
+```
+$ go get -u github.com/mattn/gom
+
+$ gom install
+
+$ go get -u github.com/aws-sdk-go/...
+
+$ gom build
 ```
 
 ## License
