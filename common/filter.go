@@ -20,17 +20,17 @@ func (filter *InstanceFilter) VpcFilterExist() bool {
 	return (len(filter.VpcName) > 0 || len(filter.VpcId) > 0)
 }
 
-func (filter *InstanceFilter) vpcDescribeParams() *ec2.DescribeVPCsInput {
+func (filter *InstanceFilter) vpcDescribeParams() *ec2.DescribeVpcsInput {
 	if len(filter.VpcId) > 0 {
-		return &ec2.DescribeVPCsInput{
-			VPCIDs: []*string{
+		return &ec2.DescribeVpcsInput{
+			VpcIds: []*string{
 				aws.String(filter.VpcId),
 			},
 		}
 	}
 
 	if len(filter.VpcName) > 0 {
-		return &ec2.DescribeVPCsInput{
+		return &ec2.DescribeVpcsInput{
 			Filters: []*ec2.Filter{
 				{
 					Name: aws.String("tag:Name"),
@@ -56,7 +56,7 @@ func (filter *InstanceFilter) vpcIdForFilter() (*string, error) {
 		return nil, err
 	}
 
-	return vpcs[0].VPCID, nil
+	return vpcs[0].VpcId, nil
 }
 
 func (filter *InstanceFilter) VpcFilter() (*ec2.Filter, error) {

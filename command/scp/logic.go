@@ -93,6 +93,6 @@ func expandRemotePath(path string, instance *ec2.Instance) string {
 	// expand 'ec2:' => 'user@ipaddr:'
 	conf := config.GetConfig()
 
-	prefix := fmt.Sprintf("%s@%s:", conf.Ssh.User, *instance.PublicIPAddress)
+	prefix := fmt.Sprintf("%s@%s:", conf.Ssh.User, *instance.PublicIpAddress)
 	return strings.Replace(path, "ec2:", prefix, 1)
 }

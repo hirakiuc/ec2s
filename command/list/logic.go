@@ -17,10 +17,10 @@ import (
 // https://github.com/aws/aws-sdk-go/blob/7e9078c250876f26da48aaf36b8dce6a462ecd8a/service/ec2/examples_test.go#L2876
 
 func vpcId(instance *ec2.Instance) string {
-	if instance.VPCID == nil {
+	if instance.VpcId == nil {
 		return ""
 	} else {
-		return *instance.VPCID
+		return *instance.VpcId
 	}
 }
 
@@ -61,7 +61,7 @@ func ShowEc2Instances(writer io.Writer, options common.FilterInterface) error {
 			table.Append(formatter.Format(vpc, i))
 
 			instanceCache.WriteEntry(
-				*i.InstanceID,
+				*i.InstanceId,
 				i,
 			)
 		}

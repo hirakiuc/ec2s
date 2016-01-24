@@ -7,7 +7,7 @@ import (
 )
 
 type VpcCache struct {
-	Entries map[string]*ec2.VPC
+	Entries map[string]*ec2.Vpc
 }
 
 var vpcCache *VpcCache
@@ -20,31 +20,31 @@ func init() {
 func GetVpcCache() *VpcCache {
 	if vpcCache == nil {
 		vpcCache = &VpcCache{
-			Entries: map[string]*ec2.VPC{},
+			Entries: map[string]*ec2.Vpc{},
 		}
 	}
 
 	return vpcCache
 }
 
-func (cache *VpcCache) ReadEntry(vpcId string) *ec2.VPC {
+func (cache *VpcCache) ReadEntry(vpcId string) *ec2.Vpc {
 	return cache.Entries[vpcId]
 }
 
-func (cache *VpcCache) WriteEntry(vpcId string, vpc *ec2.VPC) {
+func (cache *VpcCache) WriteEntry(vpcId string, vpc *ec2.Vpc) {
 	cache.Entries[vpcId] = vpc
 }
 
 func (cache *VpcCache) MakeCache() error {
 	service := common.Ec2Service()
-	res, err := service.DescribeVPCs(nil)
+	res, err := service.DescribeVpcs(nil)
 	if err != nil {
 		logger.Error("failed to make vpcs cache.\n")
 		return err
 	}
 
-	for _, vpc := range res.VPCs {
-		cache.WriteEntry(*vpc.VPCID, vpc)
+	for _, vpc := range res.Vpcs {
+		cache.WriteEntry(*vpc.VpcId, vpc)
 	}
 	return nil
 }
