@@ -6,7 +6,7 @@ import (
 
 const UNDEFINED = "---"
 
-func vpcName(vpcId *string) string {
+func vpcNameById(vpcId *string) string {
 	if vpcId == nil {
 		return UNDEFINED
 	}
