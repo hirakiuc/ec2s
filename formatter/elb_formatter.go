@@ -12,7 +12,7 @@ func NewElbFormatter() *ElbFormatter {
 
 func (formatter *ElbFormatter) Format(elb *elb.LoadBalancerDescription) []string {
 	return []string{
-		vpcName(elb.VPCID),
+		vpcNameById(elb.VPCId),
 		*elb.LoadBalancerName,
 		*elb.DNSName,
 	}

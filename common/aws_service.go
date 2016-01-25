@@ -14,8 +14,9 @@ func ElbService() *elb.ELB {
 	conf := config.GetConfig()
 
 	return elb.New(
+		session.New(),
 		&aws.Config{
-			Region:      conf.Aws.Region,
+			Region:      aws.String(conf.Aws.Region),
 			Credentials: conf.AwsCredentials(),
 		},
 	)
