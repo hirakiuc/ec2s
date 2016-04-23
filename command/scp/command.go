@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"../../chooser"
-	"../../common"
-	"../../config"
+	"github.com/hirakiuc/ec2s/chooser"
+	"github.com/hirakiuc/ec2s/common"
+	"github.com/hirakiuc/ec2s/config"
 )
 
 type Command struct {

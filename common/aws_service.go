@@ -1,7 +1,7 @@
 package common
 
 import (
-	"../config"
+	"github.com/hirakiuc/ec2s/config"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"

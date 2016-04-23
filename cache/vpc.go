@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"../common"
+	"github.com/hirakiuc/ec2s/common"
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
