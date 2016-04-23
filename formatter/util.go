@@ -1,7 +1,7 @@
 package formatter
 
 import (
-	"../cache"
+	"github.com/hirakiuc/ec2s/cache"
 )
 
 const UNDEFINED = "---"

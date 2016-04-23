@@ -3,8 +3,8 @@ package vpcs
 import (
 	"io"
 
-	"../../common"
-	"../../formatter"
+	"github.com/hirakiuc/ec2s/common"
+	"github.com/hirakiuc/ec2s/formatter"
 )
 
 func (c *Command) showVpcs(writer io.Writer) error {

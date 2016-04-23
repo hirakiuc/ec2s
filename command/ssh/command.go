@@ -6,9 +6,9 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 
-	"../../chooser"
-	"../../common"
-	"../../config"
+	"github.com/hirakiuc/ec2s/chooser"
+	"github.com/hirakiuc/ec2s/common"
+	"github.com/hirakiuc/ec2s/config"
 )
 
 type Command struct {
