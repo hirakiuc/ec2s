@@ -13,6 +13,7 @@ import (
 	"github.com/mitchellh/cli"
 )
 
+// VERSION number
 const VERSION string = "0.1.0"
 
 var logger *common.Logger
