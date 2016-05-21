@@ -4,6 +4,8 @@ EC2 instance operation tool with ssh, peco.
 
 WARNING: This project is under development.
 
+[![wercker status](https://app.wercker.com/status/d2d4b1f8ee719ce0d5163e4088312f7e/s/master "wercker status")](https://app.wercker.com/project/bykey/d2d4b1f8ee719ce0d5163e4088312f7e)
+
 ## Configure
 
 ```
