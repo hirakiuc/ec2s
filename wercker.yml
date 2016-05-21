@@ -1,0 +1,16 @@
+box: golang:1.6
+
+build:
+  steps:
+    - setup-go-workspace:
+      package-dir: github.com/hirakiuc/ec2s
+    - script:
+      name: show environment
+      code: |
+        git version
+        go version
+    - glide-install
+    - script:
+      name: go build
+      code: |
+        go build
