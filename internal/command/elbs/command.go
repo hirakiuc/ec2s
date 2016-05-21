@@ -1,11 +1,11 @@
-package vpcs
+package elbs
 
 import (
 	"flag"
 	"os"
 
-	"../../common"
-	"../../config"
+	"github.com/hirakiuc/ec2s/internal/common"
+	"github.com/hirakiuc/ec2s/internal/config"
 )
 
 type Command struct{}
@@ -21,7 +21,7 @@ func GetCommand() *Command {
 }
 
 func (c *Command) Help() string {
-	return "ec2s vpcs"
+	return "ec2s elbs"
 }
 
 func (c *Command) Run(args []string) int {
@@ -30,7 +30,7 @@ func (c *Command) Run(args []string) int {
 		return 1
 	}
 
-	if err := c.showVpcs(os.Stdout); err != nil {
+	if err := c.showElbs(os.Stdout); err != nil {
 		common.ShowError(err)
 		return 1
 	}
@@ -39,12 +39,12 @@ func (c *Command) Run(args []string) int {
 }
 
 func (c *Command) Synopsis() string {
-	return "Show vpcs."
+	return "Show elbs."
 }
 
 func (c *Command) parseOptions(args []string) error {
 	var configPath string
-	f := flag.NewFlagSet("vpcs", flag.ExitOnError)
+	f := flag.NewFlagSet("elbs", flag.ExitOnError)
 	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
 	f.Parse(args)
 

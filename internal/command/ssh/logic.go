@@ -7,8 +7,8 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 
-	"../../common"
-	"../../config"
+	"github.com/hirakiuc/ec2s/internal/common"
+	"github.com/hirakiuc/ec2s/internal/config"
 )
 
 func (c *Command) logCommand(instance *ec2.Instance, privateKeyPath *string) {

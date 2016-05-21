@@ -5,9 +5,9 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 
-	"../../cache"
-	"../../common"
-	"../../formatter"
+	"github.com/hirakiuc/ec2s/internal/cache"
+	"github.com/hirakiuc/ec2s/internal/common"
+	"github.com/hirakiuc/ec2s/internal/formatter"
 )
 
 // Reference Code

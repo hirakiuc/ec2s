@@ -7,10 +7,10 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"gopkg.in/pipe.v2"
 
-	"../cache"
-	"../command/list"
-	"../common"
-	"../config"
+	"github.com/hirakiuc/ec2s/internal/cache"
+	"github.com/hirakiuc/ec2s/internal/command/list"
+	"github.com/hirakiuc/ec2s/internal/common"
+	"github.com/hirakiuc/ec2s/internal/config"
 )
 
 var logger *common.Logger

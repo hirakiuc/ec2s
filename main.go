@@ -3,12 +3,12 @@ package main
 import (
 	"os"
 
-	"./command/elbs"
-	"./command/list"
-	"./command/scp"
-	"./command/ssh"
-	"./command/vpcs"
-	"./common"
+	"github.com/hirakiuc/ec2s/internal/command/elbs"
+	"github.com/hirakiuc/ec2s/internal/command/list"
+	"github.com/hirakiuc/ec2s/internal/command/scp"
+	"github.com/hirakiuc/ec2s/internal/command/ssh"
+	"github.com/hirakiuc/ec2s/internal/command/vpcs"
+	"github.com/hirakiuc/ec2s/internal/common"
 
 	"github.com/mitchellh/cli"
 )

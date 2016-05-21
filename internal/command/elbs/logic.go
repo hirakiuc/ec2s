@@ -5,9 +5,9 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/elb"
 
-	"../../cache"
-	"../../common"
-	"../../formatter"
+	"github.com/hirakiuc/ec2s/internal/cache"
+	"github.com/hirakiuc/ec2s/internal/common"
+	"github.com/hirakiuc/ec2s/internal/formatter"
 )
 
 func loadVpcCache() error {

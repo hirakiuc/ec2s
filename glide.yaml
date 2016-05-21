@@ -1,0 +1,15 @@
+package: github.com/hirakiuc/ec2s
+import:
+- package: github.com/BurntSushi/toml
+- package: github.com/aws/aws-sdk-go
+  subpackages:
+  - aws
+  - aws/awserr
+  - aws/credentials
+  - aws/session
+  - service/ec2
+  - service/elb
+- package: github.com/mgutz/ansi
+- package: github.com/mitchellh/cli
+- package: github.com/olekukonko/tablewriter
+- package: gopkg.in/pipe.v2

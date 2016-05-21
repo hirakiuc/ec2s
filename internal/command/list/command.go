@@ -1,14 +1,16 @@
-package elbs
+package list
 
 import (
 	"flag"
 	"os"
 
-	"../../common"
-	"../../config"
+	"github.com/hirakiuc/ec2s/internal/common"
+	"github.com/hirakiuc/ec2s/internal/config"
 )
 
-type Command struct{}
+type Command struct {
+	*common.InstanceFilter
+}
 
 var logger *common.Logger
 
@@ -17,11 +19,15 @@ func init() {
 }
 
 func GetCommand() *Command {
-	return &Command{}
+	return &Command{
+		&common.InstanceFilter{
+			VpcId: "",
+		},
+	}
 }
 
 func (c *Command) Help() string {
-	return "ec2s elbs"
+	return "ec2s list"
 }
 
 func (c *Command) Run(args []string) int {
@@ -30,7 +36,7 @@ func (c *Command) Run(args []string) int {
 		return 1
 	}
 
-	if err := c.showElbs(os.Stdout); err != nil {
+	if err := ShowEc2Instances(os.Stdout, c); err != nil {
 		common.ShowError(err)
 		return 1
 	}
@@ -39,12 +45,15 @@ func (c *Command) Run(args []string) int {
 }
 
 func (c *Command) Synopsis() string {
-	return "Show elbs."
+	return "Show ec2 instances."
 }
 
 func (c *Command) parseOptions(args []string) error {
 	var configPath string
-	f := flag.NewFlagSet("elbs", flag.ExitOnError)
+
+	f := flag.NewFlagSet("list", flag.ExitOnError)
+	f.StringVar(&c.VpcId, "vpc-id", "", "vpc id")
+	f.StringVar(&c.VpcName, "vpc-name", "", "vpc name")
 	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
 	f.Parse(args)
 
