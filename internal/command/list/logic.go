@@ -16,23 +16,24 @@ import (
 // Sample Code
 // https://github.com/aws/aws-sdk-go/blob/7e9078c250876f26da48aaf36b8dce6a462ecd8a/service/ec2/examples_test.go#L2876
 
-func vpcId(instance *ec2.Instance) string {
+func vpcID(instance *ec2.Instance) string {
 	if instance.VpcId == nil {
 		return ""
-	} else {
-		return *instance.VpcId
 	}
+
+	return *instance.VpcId
 }
 
 func loadVpcCache() (*cache.VpcCache, error) {
 	cache := cache.GetVpcCache()
 	if err := cache.MakeCache(); err != nil {
 		return nil, err
-	} else {
-		return cache, nil
 	}
+
+	return cache, nil
 }
 
+// ShowEc2Instances shows EC2 instances.
 func ShowEc2Instances(writer io.Writer, options common.FilterInterface) error {
 	vpcCache, err := loadVpcCache()
 	if err != nil {
@@ -57,7 +58,7 @@ func ShowEc2Instances(writer io.Writer, options common.FilterInterface) error {
 
 	for _, r := range res.Reservations {
 		for _, i := range r.Instances {
-			vpc := vpcCache.ReadEntry(vpcId(i))
+			vpc := vpcCache.ReadEntry(vpcID(i))
 			table.Append(formatter.Format(vpc, i))
 
 			instanceCache.WriteEntry(

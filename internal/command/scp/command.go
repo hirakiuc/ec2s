@@ -10,6 +10,7 @@ import (
 	"github.com/hirakiuc/ec2s/internal/config"
 )
 
+// Command describe sccp command.
 type Command struct {
 	*common.InstanceFilter
 	FromPath string
@@ -22,6 +23,7 @@ func init() {
 	logger = common.GetLogger()
 }
 
+// GetCommand create scp command instance.
 func GetCommand() *Command {
 	return &Command{
 		InstanceFilter: &common.InstanceFilter{
@@ -33,10 +35,12 @@ func GetCommand() *Command {
 	}
 }
 
+// Help return help message.
 func (c *Command) Help() string {
 	return "ec2s scp"
 }
 
+// Run invoke scp command.
 func (c *Command) Run(args []string) int {
 	if err := c.parseOptions(args); err != nil {
 		common.ShowError(err)
@@ -59,7 +63,7 @@ func (c *Command) Run(args []string) int {
 			if err := c.execScp(instance); err != nil {
 				logger.Error("failed to scp.\n")
 				common.ShowError(err)
-				cnt += 1
+				cnt++
 			}
 		}
 	}
@@ -67,6 +71,7 @@ func (c *Command) Run(args []string) int {
 	return cnt
 }
 
+// Synopsis return command description.
 func (c *Command) Synopsis() string {
 	return "scp from/to instance"
 }

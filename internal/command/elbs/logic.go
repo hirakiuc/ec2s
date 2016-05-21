@@ -14,9 +14,9 @@ func loadVpcCache() error {
 	cache := cache.GetVpcCache()
 	if err := cache.MakeCache(); err != nil {
 		return err
-	} else {
-		return nil
 	}
+
+	return nil
 }
 
 func (c *Command) showElbs(writer io.Writer) error {
