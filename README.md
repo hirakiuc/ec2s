@@ -75,13 +75,7 @@ $ ec2s vpcs
 ## HowToBuild
 
 ```
-$ go get -u github.com/mattn/gom
-
-$ gom install
-
-$ go get -u github.com/aws-sdk-go/...
-
-$ gom build
+$ glide install && go build
 ```
 
 ## License
