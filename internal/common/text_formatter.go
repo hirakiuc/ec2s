@@ -4,6 +4,7 @@ import (
 	"github.com/mgutz/ansi"
 )
 
+// TextFormatter define log formatter.
 type TextFormatter struct {
 	Colored bool
 }
@@ -27,6 +28,7 @@ func colorForLogLevel(level LogLevel) string {
 	return ansi.DefaultFG
 }
 
+// Format return formatted string.
 func (f *TextFormatter) Format(level LogLevel, message string) ([]byte, error) {
 	if f.Colored == false {
 		return []byte(message), nil
