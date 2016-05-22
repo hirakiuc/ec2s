@@ -16,8 +16,8 @@ func (c *Command) logCommand(instance *ec2.Instance, privateKeyPath *string) {
 	conf := config.GetConfig()
 
 	logger.Info("ssh -l %s -p %d -i %s %s %s\n",
-		conf.Ssh.User,
-		conf.Ssh.Port,
+		conf.SSH.User,
+		conf.SSH.Port,
 		*privateKeyPath,
 		*instance.PublicIpAddress,
 		c.Command,
@@ -27,7 +27,7 @@ func (c *Command) logCommand(instance *ec2.Instance, privateKeyPath *string) {
 func (c *Command) execSSH(instance *ec2.Instance) error {
 	conf := config.GetConfig()
 
-	privateKeyPath, err := (conf.Ssh).IdentityFileForName(*instance.KeyName)
+	privateKeyPath, err := (conf.SSH).IdentityFileForName(*instance.KeyName)
 	if err != nil {
 		return err
 	}
@@ -36,8 +36,8 @@ func (c *Command) execSSH(instance *ec2.Instance) error {
 
 	cmd := exec.Command(
 		"ssh",
-		"-l", conf.Ssh.User,
-		"-p", strconv.Itoa(conf.Ssh.Port),
+		"-l", conf.SSH.User,
+		"-p", strconv.Itoa(conf.SSH.Port),
 		"-i", *privateKeyPath,
 		*instance.PublicIpAddress,
 		c.Command,
