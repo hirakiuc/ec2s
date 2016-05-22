@@ -7,7 +7,7 @@ import (
 
 // InstanceFilter is a filter condition about EC2s.
 type InstanceFilter struct {
-	VpcId   string
+	VpcID   string
 	VpcName string
 }
 
@@ -20,14 +20,14 @@ type FilterInterface interface {
 
 // VpcFilterExist check whether the filter contains vpc condition or not.
 func (filter *InstanceFilter) VpcFilterExist() bool {
-	return (len(filter.VpcName) > 0 || len(filter.VpcId) > 0)
+	return (len(filter.VpcName) > 0 || len(filter.VpcID) > 0)
 }
 
 func (filter *InstanceFilter) vpcDescribeParams() *ec2.DescribeVpcsInput {
-	if len(filter.VpcId) > 0 {
+	if len(filter.VpcID) > 0 {
 		return &ec2.DescribeVpcsInput{
 			VpcIds: []*string{
-				aws.String(filter.VpcId),
+				aws.String(filter.VpcID),
 			},
 		}
 	}

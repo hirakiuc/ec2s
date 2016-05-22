@@ -27,7 +27,7 @@ func init() {
 func GetCommand() *Command {
 	return &Command{
 		InstanceFilter: &common.InstanceFilter{
-			VpcId: "",
+			VpcID: "",
 		},
 		Command: "",
 	}
@@ -71,7 +71,7 @@ func (c *Command) parseOptions(args []string) error {
 	var configPath string
 
 	f := flag.NewFlagSet("ssh", flag.ExitOnError)
-	f.StringVar(&c.VpcId, "vpc-id", "", "vpc id")
+	f.StringVar(&c.VpcID, "vpc-id", "", "vpc id")
 	f.StringVar(&c.VpcName, "vpc-name", "", "vpc name")
 	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
 	f.Parse(args)
