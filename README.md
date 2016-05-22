@@ -8,6 +8,8 @@ WARNING: This project is under development.
 [![Code Climate](https://codeclimate.com/github/hirakiuc/ec2s/badges/gpa.svg)](https://codeclimate.com/github/hirakiuc/ec2s)
 [![Issue Count](https://codeclimate.com/github/hirakiuc/ec2s/badges/issue_count.svg)](https://codeclimate.com/github/hirakiuc/ec2s)
 
+[GoDoc](https://godoc.org/github.com/hirakiuc/ec2s)
+
 ## Configure
 
 ```
