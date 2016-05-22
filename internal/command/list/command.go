@@ -8,6 +8,7 @@ import (
 	"github.com/hirakiuc/ec2s/internal/config"
 )
 
+// Command describe list command.
 type Command struct {
 	*common.InstanceFilter
 }
@@ -18,18 +19,21 @@ func init() {
 	logger = common.GetLogger()
 }
 
+// GetCommand create list command instance.
 func GetCommand() *Command {
 	return &Command{
 		&common.InstanceFilter{
-			VpcId: "",
+			VpcID: "",
 		},
 	}
 }
 
+// Help return help message.
 func (c *Command) Help() string {
 	return "ec2s list"
 }
 
+// Run invoke list command.
 func (c *Command) Run(args []string) int {
 	if err := c.parseOptions(args); err != nil {
 		common.ShowError(err)
@@ -44,6 +48,7 @@ func (c *Command) Run(args []string) int {
 	return 0
 }
 
+// Synopsis return command description.
 func (c *Command) Synopsis() string {
 	return "Show ec2 instances."
 }
@@ -52,7 +57,7 @@ func (c *Command) parseOptions(args []string) error {
 	var configPath string
 
 	f := flag.NewFlagSet("list", flag.ExitOnError)
-	f.StringVar(&c.VpcId, "vpc-id", "", "vpc id")
+	f.StringVar(&c.VpcID, "vpc-id", "", "vpc id")
 	f.StringVar(&c.VpcName, "vpc-name", "", "vpc name")
 	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
 	f.Parse(args)

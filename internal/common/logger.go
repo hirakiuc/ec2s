@@ -11,17 +11,30 @@ import (
 	"sync"
 )
 
+// LogLevel define log level.
 type LogLevel uint8
 
 const (
+	// PanicLevel is a log level on critical case.
 	PanicLevel LogLevel = iota
+
+	// FatalLevel is a log level on fatal case.
 	FatalLevel
+
+	// ErrorLevel is a log level on error case.
 	ErrorLevel
+
+	// WarnLevel is a log level on warn case.
 	WarnLevel
+
+	// InfoLevel is a log level on info logging.
 	InfoLevel
+
+	// DebugLevel is a log level on debug logging.
 	DebugLevel
 )
 
+// Logger define a logger struct.
 type Logger struct {
 	LogLevel  LogLevel
 	Output    io.Writer
@@ -41,10 +54,12 @@ func newLogger() *Logger {
 	}
 }
 
+// GetLogger return Logger instance.
 func GetLogger() *Logger {
 	return logger
 }
 
+// SetColored configure colorize log message or not.
 func (log *Logger) SetColored(flag bool) {
 	log.Formatter.Colored = flag
 }
@@ -68,38 +83,45 @@ func (log *Logger) log(logLevel LogLevel, msg string) {
 	}
 }
 
+// Debug puts debug level message to log.
 func (log *Logger) Debug(format string, args ...interface{}) {
 	if log.LogLevel >= DebugLevel {
 		log.log(DebugLevel, fmt.Sprintf(format, args...))
 	}
 }
 
+// Print is a alias to Info.
 func (log *Logger) Print(format string, args ...interface{}) {
 	log.Info(format, args...)
 }
 
+// Info puts info level message to log.
 func (log *Logger) Info(format string, args ...interface{}) {
 	if log.LogLevel >= InfoLevel {
 		log.log(InfoLevel, fmt.Sprintf(format, args...))
 	}
 }
 
+// Warn puts warn level message to log.
 func (log *Logger) Warn(format string, args ...interface{}) {
 	if log.LogLevel >= WarnLevel {
 		log.log(WarnLevel, fmt.Sprintf(format, args...))
 	}
 }
 
+// Warning is a alias to Warn.
 func (log *Logger) Warning(format string, args ...interface{}) {
 	log.Warn(format, args...)
 }
 
+// Error puts error message to log.
 func (log *Logger) Error(format string, args ...interface{}) {
 	if log.LogLevel >= ErrorLevel {
 		log.log(ErrorLevel, fmt.Sprintf(format, args...))
 	}
 }
 
+// Fatal puts fatal message to log.
 func (log *Logger) Fatal(format string, args ...interface{}) {
 	if log.LogLevel >= FatalLevel {
 		log.log(FatalLevel, fmt.Sprintf(format, args...))
@@ -108,6 +130,7 @@ func (log *Logger) Fatal(format string, args ...interface{}) {
 	os.Exit(1)
 }
 
+// Panic puts panic message to log.
 func (log *Logger) Panic(format string, args ...interface{}) {
 	if log.LogLevel >= PanicLevel {
 		log.log(PanicLevel, fmt.Sprintf(format, args...))

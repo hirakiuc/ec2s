@@ -6,6 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
+// VpcCache has Cached Vpcs
 type VpcCache struct {
 	Entries map[string]*ec2.Vpc
 }
@@ -17,6 +18,7 @@ func init() {
 	logger = common.GetLogger()
 }
 
+// GetVpcCache return the VpcCache instance.
 func GetVpcCache() *VpcCache {
 	if vpcCache == nil {
 		vpcCache = &VpcCache{
@@ -27,14 +29,17 @@ func GetVpcCache() *VpcCache {
 	return vpcCache
 }
 
-func (cache *VpcCache) ReadEntry(vpcId string) *ec2.Vpc {
-	return cache.Entries[vpcId]
+// ReadEntry return a cached Vpc which identifiied by vpcID
+func (cache *VpcCache) ReadEntry(vpcID string) *ec2.Vpc {
+	return cache.Entries[vpcID]
 }
 
-func (cache *VpcCache) WriteEntry(vpcId string, vpc *ec2.Vpc) {
-	cache.Entries[vpcId] = vpc
+// WriteEntry cache the specified Vpc in VpcCache.
+func (cache *VpcCache) WriteEntry(vpcID string, vpc *ec2.Vpc) {
+	cache.Entries[vpcID] = vpc
 }
 
+// MakeCache create Vpc Cache
 func (cache *VpcCache) MakeCache() error {
 	service := common.Ec2Service()
 	res, err := service.DescribeVpcs(nil)
@@ -49,8 +54,9 @@ func (cache *VpcCache) MakeCache() error {
 	return nil
 }
 
-func (cache *VpcCache) VpcName(vpcId string) *string {
-	vpc := cache.ReadEntry(vpcId)
+// VpcName return name of the vpc which specified by vpcID
+func (cache *VpcCache) VpcName(vpcID string) *string {
+	vpc := cache.ReadEntry(vpcID)
 	if vpc == nil {
 		return nil
 	}

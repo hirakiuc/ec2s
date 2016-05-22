@@ -26,17 +26,18 @@ func ec2instance(line string) *ec2.Instance {
 
 	vars := strings.Split(line, "\t")
 
-	instanceId := strings.Trim(vars[2], " ")
+	instanceID := strings.Trim(vars[2], " ")
 
 	cache := cache.GetEc2InstanceCache()
-	instance := cache.ReadEntry(instanceId)
+	instance := cache.ReadEntry(instanceID)
 	if instance == nil {
-		logger.Error("Can't find ec2 instance: '%s'\n", instanceId)
+		logger.Error("Can't find ec2 instance: '%s'\n", instanceID)
 	}
 
 	return instance
 }
 
+// ChooseEc2Instances shows ec2 instances to choose.
 func ChooseEc2Instances(options common.FilterInterface) ([]*ec2.Instance, error) {
 	buffer := bytes.NewBuffer(nil)
 	err := list.ShowEc2Instances(buffer, options)

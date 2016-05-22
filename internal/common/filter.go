@@ -5,26 +5,29 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
+// InstanceFilter is a filter condition about EC2s.
 type InstanceFilter struct {
-	VpcId   string
+	VpcID   string
 	VpcName string
 }
 
+// FilterInterface define interface of filter objects.
 type FilterInterface interface {
 	VpcFilter() (*ec2.Filter, error)
 	InstancesFilter() (*ec2.DescribeInstancesInput, error)
 	VpcFilterExist() bool
 }
 
+// VpcFilterExist check whether the filter contains vpc condition or not.
 func (filter *InstanceFilter) VpcFilterExist() bool {
-	return (len(filter.VpcName) > 0 || len(filter.VpcId) > 0)
+	return (len(filter.VpcName) > 0 || len(filter.VpcID) > 0)
 }
 
 func (filter *InstanceFilter) vpcDescribeParams() *ec2.DescribeVpcsInput {
-	if len(filter.VpcId) > 0 {
+	if len(filter.VpcID) > 0 {
 		return &ec2.DescribeVpcsInput{
 			VpcIds: []*string{
-				aws.String(filter.VpcId),
+				aws.String(filter.VpcID),
 			},
 		}
 	}
@@ -45,7 +48,7 @@ func (filter *InstanceFilter) vpcDescribeParams() *ec2.DescribeVpcsInput {
 	return nil
 }
 
-func (filter *InstanceFilter) vpcIdForFilter() (*string, error) {
+func (filter *InstanceFilter) vpcIDForFilter() (*string, error) {
 	params := filter.vpcDescribeParams()
 	if params == nil {
 		return nil, nil // without vpc filter
@@ -59,26 +62,27 @@ func (filter *InstanceFilter) vpcIdForFilter() (*string, error) {
 	return vpcs[0].VpcId, nil
 }
 
+// VpcFilter create ec2.Filter instance.
 func (filter *InstanceFilter) VpcFilter() (*ec2.Filter, error) {
-	vpcId, err := filter.vpcIdForFilter()
+	vpcID, err := filter.vpcIDForFilter()
 	if err != nil {
 		return nil, err
 	}
 
-	if vpcId == nil {
+	if vpcID == nil {
 		return nil, nil
 	}
 
 	return &ec2.Filter{
 		Name: aws.String("vpc-id"),
 		Values: []*string{
-			aws.String(*vpcId),
+			aws.String(*vpcID),
 		},
 	}, nil
 }
 
+// InstancesFilter create ec2.DescribeInstancesInput instance.
 func (filter *InstanceFilter) InstancesFilter() (*ec2.DescribeInstancesInput, error) {
-	//func InstancesFilter(options FilterInterface) *ec2.DescribeInstancesInput {
 	filters := []*ec2.Filter{}
 
 	vpcFilter, err := filter.VpcFilter()
@@ -96,7 +100,7 @@ func (filter *InstanceFilter) InstancesFilter() (*ec2.DescribeInstancesInput, er
 		return &ec2.DescribeInstancesInput{
 			Filters: filters,
 		}, nil
-	} else {
-		return &ec2.DescribeInstancesInput{}, nil
 	}
+
+	return &ec2.DescribeInstancesInput{}, nil
 }

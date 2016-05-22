@@ -6,6 +6,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
+// NewTableWriter create tablewriter.Table instance.
 func NewTableWriter(writer io.Writer) *tablewriter.Table {
 	table := tablewriter.NewWriter(writer)
 

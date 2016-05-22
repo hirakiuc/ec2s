@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/elb"
 )
 
+// ElbService is a aws Elb client.
 func ElbService() *elb.ELB {
 	conf := config.GetConfig()
 
@@ -22,6 +23,7 @@ func ElbService() *elb.ELB {
 	)
 }
 
+// Ec2Service is a aws EC2 client.
 func Ec2Service() *ec2.EC2 {
 	conf := config.GetConfig()
 
@@ -56,6 +58,7 @@ func findVpcs(params *ec2.DescribeVpcsInput) ([]*ec2.Vpc, error) {
 	return res.Vpcs, nil
 }
 
+// ShowError handle some kinds of error object to put error log.
 func ShowError(err error) {
 	if awsErr, ok := err.(awserr.Error); ok {
 		if reqErr, ok := err.(awserr.RequestFailure); ok {
@@ -72,6 +75,7 @@ func ShowError(err error) {
 	}
 }
 
+// IsNetworkAccessible check whether the EC2 instance is reachable or not.
 func IsNetworkAccessible(instance *ec2.Instance) bool {
 	if *instance.State.Name != "running" {
 		logger.Warn("Instance(%s) is not running.\n", *instance.InstanceId)

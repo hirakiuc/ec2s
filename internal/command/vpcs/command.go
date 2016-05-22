@@ -8,6 +8,7 @@ import (
 	"github.com/hirakiuc/ec2s/internal/config"
 )
 
+// Command describe vpcs command.
 type Command struct{}
 
 var logger *common.Logger
@@ -16,14 +17,17 @@ func init() {
 	logger = common.GetLogger()
 }
 
+// GetCommand create vpcs command instance.
 func GetCommand() *Command {
 	return &Command{}
 }
 
+// Help return help message.
 func (c *Command) Help() string {
 	return "ec2s vpcs"
 }
 
+// Run invoke vpcs command.
 func (c *Command) Run(args []string) int {
 	if err := c.parseOptions(args); err != nil {
 		common.ShowError(err)
@@ -38,6 +42,7 @@ func (c *Command) Run(args []string) int {
 	return 0
 }
 
+// Synopsis return command description.
 func (c *Command) Synopsis() string {
 	return "Show vpcs."
 }

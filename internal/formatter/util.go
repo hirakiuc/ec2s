@@ -4,17 +4,18 @@ import (
 	"github.com/hirakiuc/ec2s/internal/cache"
 )
 
+// UNDEFINED define the string to show 'the value is not defined.'.
 const UNDEFINED = "---"
 
-func vpcNameById(vpcId *string) string {
-	if vpcId == nil {
+func vpcNameByID(vpcID *string) string {
+	if vpcID == nil {
 		return UNDEFINED
 	}
 
-	vpcName := (cache.GetVpcCache()).VpcName(*vpcId)
+	vpcName := (cache.GetVpcCache()).VpcName(*vpcID)
 	if vpcName != nil {
 		return *vpcName
-	} else {
-		return UNDEFINED
 	}
+
+	return UNDEFINED
 }

@@ -4,8 +4,10 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
+// Ec2Formatter describe a formatter to display EC2 instance.
 type Ec2Formatter struct{}
 
+// NewEc2Formatter create Ec2Formatter instance.
 func NewEc2Formatter() *Ec2Formatter {
 	return &Ec2Formatter{}
 }
@@ -35,11 +37,12 @@ func vpcName(vpc *ec2.Vpc) string {
 func ipAddress(instance *ec2.Instance) string {
 	if instance.PublicIpAddress != nil {
 		return *instance.PublicIpAddress
-	} else {
-		return UNDEFINED
 	}
+
+	return UNDEFINED
 }
 
+// Format return formatted string which contains the EC2 instance.
 func (formatter *Ec2Formatter) Format(vpc *ec2.Vpc, instance *ec2.Instance) []string {
 	return []string{
 		nameOfVpc(vpc),

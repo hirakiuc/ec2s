@@ -24,7 +24,7 @@ func (c *Command) logCommand(instance *ec2.Instance, privateKeyPath *string) {
 	)
 }
 
-func (c *Command) execSsh(instance *ec2.Instance) error {
+func (c *Command) execSSH(instance *ec2.Instance) error {
 	conf := config.GetConfig()
 
 	privateKeyPath, err := (conf.Ssh).IdentityFileForName(*instance.KeyName)
