@@ -14,13 +14,13 @@ import (
 type Config struct {
 	Aws    Aws
 	Peco   Peco
-	Ssh    Ssh
+	SSH    SSH
 	Common Common
 }
 
 // Aws define config about aws.
 type Aws struct {
-	AccessKeyId     string `toml:"AWS_ACCESS_KEY_ID"`
+	AccessKeyID     string `toml:"AWS_ACCESS_KEY_ID"`
 	SecretAccessKey string `toml:"AWS_SECRET_ACCESS_KEY"`
 	Region          string `toml:"AWS_REGION"`
 }
@@ -30,8 +30,8 @@ type Peco struct {
 	Path string `toml:"path"`
 }
 
-// Ssh define config about ssh.
-type Ssh struct {
+// SSH define config about ssh.
+type SSH struct {
 	Port          int            `toml:"port"`
 	User          string         `toml:"user"`
 	IdentityFiles []IdentityFile `toml:"identity_file"`
@@ -77,13 +77,13 @@ func expandPath(path string) string {
 // AwsCredentials return credentials.Credentials instance.
 func (c *Config) AwsCredentials() *credentials.Credentials {
 	return credentials.NewStaticCredentials(
-		c.Aws.AccessKeyId,
+		c.Aws.AccessKeyID,
 		c.Aws.SecretAccessKey,
 		"")
 }
 
 // IdentityFileForName return path of the IdentityFile.
-func (ssh *Ssh) IdentityFileForName(name string) (*string, error) {
+func (ssh *SSH) IdentityFileForName(name string) (*string, error) {
 	for _, identityFile := range ssh.IdentityFiles {
 		if identityFile.Name == name {
 			return &identityFile.Path, nil

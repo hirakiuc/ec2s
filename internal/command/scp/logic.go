@@ -19,7 +19,7 @@ func (c *Command) logCommand(instance *ec2.Instance, privateKeyPath *string, fro
 	conf := config.GetConfig()
 
 	logger.Info("scp -P %d -i %s %s %s\n",
-		conf.Ssh.Port,
+		conf.SSH.Port,
 		*privateKeyPath,
 		fromPath,
 		toPath,
@@ -29,7 +29,7 @@ func (c *Command) logCommand(instance *ec2.Instance, privateKeyPath *string, fro
 func (c *Command) execScp(instance *ec2.Instance) error {
 	conf := config.GetConfig()
 
-	privateKeyPath, err := (conf.Ssh).IdentityFileForName(*instance.KeyName)
+	privateKeyPath, err := (conf.SSH).IdentityFileForName(*instance.KeyName)
 	if err != nil {
 		return err
 	}
@@ -41,7 +41,7 @@ func (c *Command) execScp(instance *ec2.Instance) error {
 
 	cmd := exec.Command(
 		"scp",
-		"-P", strconv.Itoa(conf.Ssh.Port),
+		"-P", strconv.Itoa(conf.SSH.Port),
 		"-i", *privateKeyPath,
 		fromPath,
 		toPath,
@@ -93,6 +93,6 @@ func expandRemotePath(path string, instance *ec2.Instance) string {
 	// expand 'ec2:' => 'user@ipaddr:'
 	conf := config.GetConfig()
 
-	prefix := fmt.Sprintf("%s@%s:", conf.Ssh.User, *instance.PublicIpAddress)
+	prefix := fmt.Sprintf("%s@%s:", conf.SSH.User, *instance.PublicIpAddress)
 	return strings.Replace(path, "ec2:", prefix, 1)
 }
