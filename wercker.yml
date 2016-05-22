@@ -14,3 +14,8 @@ build:
       name: go build
       code: |
         go build
+  after-steps:
+    - slack-notifier:
+      url: $SLACK_URL
+      channel: ec2s
+      username: wercker
