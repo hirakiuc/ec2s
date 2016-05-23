@@ -9,11 +9,53 @@ build:
       code: |
         git version
         go version
+    - golint:
+      exclude: "vendor/"
     - glide-install
     - script:
       name: go build
       code: |
         go build
+  after-steps:
+    - slack-notifier:
+      url: $SLACK_URL
+      channel: ec2s
+      username: wercker
+
+deploy:
+  steps:
+    - setup-go-workspace:
+      package-dir: github.com/hirakiuc/ec2s
+    - script:
+      name: show environment
+      code: |
+        git version
+        go version
+    - glide-install
+    - script:
+      name: install mitchellh/gox
+      code: |
+        go get -u -v github.com/mitchellh/gox
+    - wercker/gox:
+      os: darwin linux windows
+      arch: 386 amd64
+      output: '{{.Dir}}_{{.OS}}_{{.Arch}}/{{.Dir}}'
+      dest: $WERCKER_OUTPUT_DIR/pkg
+    - tcnksm/zip:
+      input: $WERCKER_OUTPUT_DIR/pkg
+      output: $WERCKER_OUTPUT_DIR/dist
+    - script:
+      name: set release tag
+      code: |
+        if [ -n "$GOBUMP_NEW_VERSION" ]; then
+          export RELEASE_TAG="v$GOBUMP_NEW_VERSION"
+        fi
+    - tcnksm/ghr:
+      token: $GITHUB_TOKEN
+      input: $WERCKER_OUTPUT_DIR/dist
+      replace: true
+      version: $RELEASE_TAG
+      opt: --draft
   after-steps:
     - slack-notifier:
       url: $SLACK_URL
