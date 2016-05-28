@@ -57,7 +57,7 @@ deploy:
     - tcnksm/ghr:
       token: $GITHUB_TOKEN
       input: $WERCKER_OUTPUT_DIR/dist
-      replace: true
+      replace: false
       version: $RELEASE_TAG
       opt: -u hirakiuc -r ec2s --draft
   after-steps:
