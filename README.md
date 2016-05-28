@@ -84,6 +84,14 @@ $ ec2s vpcs
 $ glide install && go build
 ```
 
+## Release Flow
+
+1. bump version on master branch.
+2. Create pull request from `master` branch to `release` branch.
+3. Merge !
+4. wercker CI will create new release assets.
+5. Add tag to new version & push.
+
 ## License
 
 MIT License
