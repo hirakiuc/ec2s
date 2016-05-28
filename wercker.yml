@@ -24,6 +24,10 @@ build:
 
 deploy:
   steps:
+    - script:
+      name: install zip
+      code: |
+        apt-get update && apt-get install -y zip
     - setup-go-workspace:
       package-dir: github.com/hirakiuc/ec2s
     - script:
@@ -32,6 +36,12 @@ deploy:
         git version
         go version
     - glide-install
+    - script:
+      name: go build
+      code: |
+        go build
+        export RELEASE_TAG="v$(./ec2s --version 2>&1)"
+        echo $RELEASE_TAG
     - script:
       name: install mitchellh/gox
       code: |
@@ -44,18 +54,12 @@ deploy:
     - tcnksm/zip:
       input: $WERCKER_OUTPUT_DIR/pkg
       output: $WERCKER_OUTPUT_DIR/dist
-    - script:
-      name: set release tag
-      code: |
-        if [ -n "$GOBUMP_NEW_VERSION" ]; then
-          export RELEASE_TAG="v$GOBUMP_NEW_VERSION"
-        fi
     - tcnksm/ghr:
       token: $GITHUB_TOKEN
       input: $WERCKER_OUTPUT_DIR/dist
       replace: true
       version: $RELEASE_TAG
-      opt: --draft
+      opt: -u hirakiuc -r ec2s --draft
   after-steps:
     - slack-notifier:
       url: $SLACK_URL
