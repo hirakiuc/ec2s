@@ -99,8 +99,10 @@ func (c *Command) parseOptions(args []string) error {
 	logger.SetColored(conf.Common.ColorizedOutput)
 
 	if f.NArg() != 2 {
+		err := common.NewArgumentError("Require two arguments.")
+		common.ShowError(err)
 		f.Usage()
-		os.Exit(1) // TODO: fix to return error.
+		return err
 	}
 
 	c.FromPath = f.Arg(0)
