@@ -9,6 +9,7 @@ import:
   - aws/session
   - service/ec2
   - service/elb
+- package: github.com/jessevdk/go-flags
 - package: github.com/mgutz/ansi
 - package: github.com/mitchellh/cli
 - package: github.com/olekukonko/tablewriter

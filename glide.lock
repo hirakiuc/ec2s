@@ -1,8 +1,6 @@
-hash: cfdada06116a4aef6edc1f8a6adcac83786960b281b21e6ec15abab817eb1717
-updated: 2016-05-19T23:04:37.723179164+09:00
+hash: 142c276aa737ed1de704062fe0ec0ec387e270574cc2079c322e313ea19560d7
+updated: 2016-07-04T21:07:25.708301615+09:00
 imports:
-- name: github.com/armon/go-radix
-  version: 4239b77079c7b5d1243b7b4736304ce8ddb6f0f2
 - name: github.com/aws/aws-sdk-go
   version: 501dd3226ceb6863d89d82e9f7c9f59a43efb008
   subpackages:
@@ -29,16 +27,14 @@ imports:
   - private/protocol/rest
   - aws/credentials/ec2rolecreds
   - aws/ec2metadata
-- name: github.com/bgentry/speakeasy
-  version: 36e9cfdd690967f4f690c6edcc9ffacd006014a0
 - name: github.com/BurntSushi/toml
   version: f0aeabca5a127c4078abb8c8d64298b147264b55
 - name: github.com/go-ini/ini
   version: 12f418cc7edc5a618a51407b7ac1f1f512139df3
+- name: github.com/jessevdk/go-flags
+  version: 1b9464415f11bc9603a91ac2b20b00121b91abe7
 - name: github.com/jmespath/go-jmespath
   version: 0b12d6b521d83fc7f755e7cfc1b1fbdd35a01a74
-- name: github.com/mattn/go-isatty
-  version: 56b76bdf51f7708750eac80fa38b952bb9f32639
 - name: github.com/mattn/go-runewidth
   version: d6bea18f789704b5f83375793155289da36a3c7f
 - name: github.com/mgutz/ansi
@@ -47,10 +43,6 @@ imports:
   version: 168daae10d6ff81b8b1201b0a4c9607d7e9b82e3
 - name: github.com/olekukonko/tablewriter
   version: 279fecc91ba77130f753d073259d7f9e246acdda
-- name: golang.org/x/sys
-  version: d4feaf1a7e61e1d9e79e6c4e76c6349e9cab0a03
-  subpackages:
-  - unix
 - name: gopkg.in/pipe.v2
   version: 3c2ca4d525447ec8b2f606a6974f9c9f40831f26
 devImports: []
