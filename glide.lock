@@ -1,5 +1,5 @@
 hash: 142c276aa737ed1de704062fe0ec0ec387e270574cc2079c322e313ea19560d7
-updated: 2016-07-04T21:07:25.708301615+09:00
+updated: 2016-07-10T16:24:31.051719005+09:00
 imports:
 - name: github.com/aws/aws-sdk-go
   version: 501dd3226ceb6863d89d82e9f7c9f59a43efb008
@@ -32,7 +32,7 @@ imports:
 - name: github.com/go-ini/ini
   version: 12f418cc7edc5a618a51407b7ac1f1f512139df3
 - name: github.com/jessevdk/go-flags
-  version: 1b9464415f11bc9603a91ac2b20b00121b91abe7
+  version: f2785f5820ec967043de79c8be97edfc464ca745
 - name: github.com/jmespath/go-jmespath
   version: 0b12d6b521d83fc7f755e7cfc1b1fbdd35a01a74
 - name: github.com/mattn/go-runewidth
@@ -45,4 +45,4 @@ imports:
   version: 279fecc91ba77130f753d073259d7f9e246acdda
 - name: gopkg.in/pipe.v2
   version: 3c2ca4d525447ec8b2f606a6974f9c9f40831f26
-devImports: []
+testImports: []
