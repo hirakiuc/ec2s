@@ -7,8 +7,8 @@ import (
 
 // InstanceFilter is a filter condition about EC2s.
 type InstanceFilter struct {
-	VpcID   string
-	VpcName string
+	VpcID   string `short:"i" long:"vpc-id" description:"<string> vpc id" default:""`
+	VpcName string `short:"n" long:"vpc-name" description:"<string> vpc name" default:""`
 }
 
 // FilterInterface define interface of filter objects.

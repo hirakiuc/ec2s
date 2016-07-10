@@ -1,11 +1,10 @@
 package list
 
 import (
-	"flag"
 	"os"
 
 	"github.com/hirakiuc/ec2s/internal/common"
-	"github.com/hirakiuc/ec2s/internal/config"
+	"github.com/hirakiuc/ec2s/internal/options"
 )
 
 // Command describe list command.
@@ -14,57 +13,42 @@ type Command struct {
 }
 
 var logger *common.Logger
+var command Command
 
 func init() {
 	logger = common.GetLogger()
-}
+	command = Command{&common.InstanceFilter{}}
 
-// GetCommand create list command instance.
-func GetCommand() *Command {
-	return &Command{
-		&common.InstanceFilter{
-			VpcID: "",
-		},
+	_, err := options.AddCommand(
+		"list",
+		"List ec2 instances.",
+		"list command show ec2 instances.",
+		&command)
+	if err != nil {
+		logger.Error("Internal Error: %v", err)
+		os.Exit(1)
 	}
 }
 
-// Help return help message.
-func (c *Command) Help() string {
-	return "ec2s list"
-}
-
-// Run invoke list command.
-func (c *Command) Run(args []string) int {
-	if err := c.parseOptions(args); err != nil {
+// Execute invoke list command.
+func (c *Command) Execute(args []string) error {
+	if err := c.validateOptions(args); err != nil {
 		common.ShowError(err)
-		return 1
+		return err
 	}
 
 	if err := ShowEc2Instances(os.Stdout, c); err != nil {
 		common.ShowError(err)
-		return 1
+		return err
 	}
 
-	return 0
+	return nil
 }
 
-// Synopsis return command description.
-func (c *Command) Synopsis() string {
-	return "Show ec2 instances."
-}
+func (c *Command) validateOptions(args []string) error {
+	opts := options.GetOptions()
 
-func (c *Command) parseOptions(args []string) error {
-	var configPath string
-
-	f := flag.NewFlagSet("list", flag.ExitOnError)
-	f.StringVar(&c.VpcID, "vpc-id", "", "vpc id")
-	f.StringVar(&c.VpcName, "vpc-name", "", "vpc name")
-	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
-	f.Parse(args)
-
-	_, err := config.LoadConfig(configPath)
-	if err != nil {
-		logger.Error("Can't load config file.\n")
+	if err := opts.Validate(); err != nil {
 		return err
 	}
 

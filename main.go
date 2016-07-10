@@ -3,14 +3,13 @@ package main
 import (
 	"os"
 
-	"github.com/hirakiuc/ec2s/internal/command/elbs"
-	"github.com/hirakiuc/ec2s/internal/command/list"
-	"github.com/hirakiuc/ec2s/internal/command/scp"
-	"github.com/hirakiuc/ec2s/internal/command/ssh"
-	"github.com/hirakiuc/ec2s/internal/command/vpcs"
+	_ "github.com/hirakiuc/ec2s/internal/command/elbs"
+	_ "github.com/hirakiuc/ec2s/internal/command/list"
+	_ "github.com/hirakiuc/ec2s/internal/command/scp"
+	_ "github.com/hirakiuc/ec2s/internal/command/ssh"
+	_ "github.com/hirakiuc/ec2s/internal/command/vpcs"
 	"github.com/hirakiuc/ec2s/internal/common"
-
-	"github.com/mitchellh/cli"
+	"github.com/hirakiuc/ec2s/internal/options"
 )
 
 // VERSION number
@@ -23,29 +22,7 @@ func init() {
 }
 
 func main() {
-	c := cli.NewCLI("ec2s", VERSION)
-	c.Args = os.Args[1:]
-	c.Commands = map[string]cli.CommandFactory{
-		"list": func() (cli.Command, error) {
-			return list.GetCommand(), nil
-		},
-		"vpcs": func() (cli.Command, error) {
-			return vpcs.GetCommand(), nil
-		},
-		"elbs": func() (cli.Command, error) {
-			return elbs.GetCommand(), nil
-		},
-		"ssh": func() (cli.Command, error) {
-			return ssh.GetCommand(), nil
-		},
-		"scp": func() (cli.Command, error) {
-			return scp.GetCommand(), nil
-		},
+	if _, err := options.ParseOptions(); err != nil {
+		os.Exit(1)
 	}
-
-	exitStatus, err := c.Run()
-	if err != nil {
-		logger.Error(err.Error())
-	}
-	os.Exit(exitStatus)
 }
