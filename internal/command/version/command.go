@@ -1,8 +1,6 @@
 package version
 
 import (
-	"fmt"
-	"io"
 	"os"
 
 	"github.com/hirakiuc/ec2s/internal/common"
@@ -49,11 +47,5 @@ func (c *Command) Execute(args []string) error {
 }
 
 func (c *Command) validateOptions(args []string) error {
-	return nil
-}
-
-// ShowVersion print VERSION.
-func (c *Command) ShowVersion(writer io.Writer) error {
-	fmt.Fprintf(writer, "%s\n", VERSION)
 	return nil
 }
