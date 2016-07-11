@@ -34,7 +34,7 @@ func init() {
 		"ssh command invoke ssh to selected ec2 instance",
 		&command)
 	if err != nil {
-		logger.Error("Internal Error: %v", err)
+		common.ShowError(err)
 		os.Exit(1)
 	}
 }

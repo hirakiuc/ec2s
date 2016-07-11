@@ -7,13 +7,11 @@ import (
 	_ "github.com/hirakiuc/ec2s/internal/command/list"
 	_ "github.com/hirakiuc/ec2s/internal/command/scp"
 	_ "github.com/hirakiuc/ec2s/internal/command/ssh"
+	_ "github.com/hirakiuc/ec2s/internal/command/version"
 	_ "github.com/hirakiuc/ec2s/internal/command/vpcs"
 	"github.com/hirakiuc/ec2s/internal/common"
 	"github.com/hirakiuc/ec2s/internal/options"
 )
-
-// VERSION number
-const VERSION string = "0.1.0"
 
 var logger *common.Logger
 

@@ -23,7 +23,7 @@ func init() {
 		"elbs command show elb instances",
 		&command)
 	if err != nil {
-		logger.Error("Internal Error: %v", err)
+		common.ShowError(err)
 		os.Exit(1)
 	}
 }

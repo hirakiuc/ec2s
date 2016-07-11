@@ -34,7 +34,7 @@ func init() {
 		"scp command invoke scp to selected ec2 instances",
 		&command)
 	if err != nil {
-		logger.Error("Internal Error: %v", err)
+		common.ShowError(err)
 		os.Exit(1)
 	}
 }

@@ -23,7 +23,7 @@ func init() {
 		"vpcs command show vpc definitions.",
 		&command)
 	if err != nil {
-		logger.Error("Internal Error: %v", err)
+		common.ShowError(err)
 		os.Exit(1)
 	}
 }
