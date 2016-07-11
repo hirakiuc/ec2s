@@ -16,7 +16,7 @@ func init() {
 // Options describe global options of ec2s command.
 type Options struct {
 	ConfigPath string `short:"c" long:"config-path" description:"<string> config file path" default:"~/.ec2s.toml"`
-	Verbose    bool   `short:"v" long:"verbose" description:"show verbose messages"`
+	Debug      bool   `short:"D" long:"debug" description:"Show debug messages"`
 }
 
 var options Options
