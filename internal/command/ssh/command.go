@@ -1,14 +1,15 @@
 package ssh
 
 import (
-	"flag"
+	"errors"
+	"os"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 
 	"github.com/hirakiuc/ec2s/internal/chooser"
 	"github.com/hirakiuc/ec2s/internal/common"
-	"github.com/hirakiuc/ec2s/internal/config"
+	"github.com/hirakiuc/ec2s/internal/options"
 )
 
 // Command describe ssh command.
@@ -18,41 +19,41 @@ type Command struct {
 }
 
 var logger *common.Logger
+var command Command
 
 func init() {
 	logger = common.GetLogger()
-}
+	command = Command{
+		InstanceFilter: &common.InstanceFilter{},
+		Command:        "",
+	}
 
-// GetCommand create scp command instance.
-func GetCommand() *Command {
-	return &Command{
-		InstanceFilter: &common.InstanceFilter{
-			VpcID: "",
-		},
-		Command: "",
+	_, err := options.AddCommand(
+		"ssh",
+		"ssh to the selected ec2 instance",
+		"ssh command invoke ssh to selected ec2 instance",
+		&command)
+	if err != nil {
+		common.ShowError(err)
+		os.Exit(1)
 	}
 }
 
-// Help return help message.
-func (c *Command) Help() string {
-	return "ec2s ssh"
-}
-
-// Run invoke scp command.
-func (c *Command) Run(args []string) int {
-	if err := c.parseOptions(args); err != nil {
+// Execute invoke scp command.
+func (c *Command) Execute(args []string) error {
+	if err := c.validateOptions(args); err != nil {
 		common.ShowError(err)
-		return 1
+		return err
 	}
 
 	instances, err := chooser.ChooseEc2Instances(c)
 	if err != nil {
 		common.ShowError(err)
-		return 1
+		return err
 	}
 
 	if len(instances) == 0 {
-		return 0
+		return nil
 	}
 
 	if len(c.Command) > 0 {
@@ -62,65 +63,61 @@ func (c *Command) Run(args []string) int {
 	return c.execSSHLogin(instances)
 }
 
-// Synopsis return command description.
-func (c *Command) Synopsis() string {
-	return "ssh to instance"
-}
+func (c *Command) validateOptions(args []string) error {
+	opts := options.GetOptions()
 
-func (c *Command) parseOptions(args []string) error {
-	var configPath string
-
-	f := flag.NewFlagSet("ssh", flag.ExitOnError)
-	f.StringVar(&c.VpcID, "vpc-id", "", "vpc id")
-	f.StringVar(&c.VpcName, "vpc-name", "", "vpc name")
-	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
-	f.Parse(args)
-
-	conf, err := config.LoadConfig(configPath)
-	if err != nil {
-		logger.Error("Can't load config file.\n")
+	if err := opts.Validate(); err != nil {
 		return err
 	}
 
-	logger := common.GetLogger()
-	logger.SetColored(conf.Common.ColorizedOutput)
-
-	if f.NArg() > 0 {
-		c.Command = strings.Join(f.Args(), " ")
+	if len(args) > 0 {
+		c.Command = strings.Join(args, " ")
 	}
 
 	return nil
 }
 
-func (c *Command) execSSHLogin(instances []*ec2.Instance) int {
+func (c *Command) execSSHLogin(instances []*ec2.Instance) error {
 	if len(instances) > 1 {
 		logger.Warn("ssh subcommand only use first selection.\n")
 	}
 
 	instance := instances[0]
-	if common.IsNetworkAccessible(instance) == false {
-		return 1
+	if err := common.IsNetworkAccessible(instance); err != nil {
+		common.ShowError(err)
+		return err
 	}
 
 	if err := c.execSSH(instances[0]); err != nil {
 		common.ShowError(err)
-		return 1
+		return err
 	}
 
-	return 0
+	return nil
 }
 
-func (c *Command) execSSHCommand(instances []*ec2.Instance) int {
-	ret := 0
+func (c *Command) execSSHCommand(instances []*ec2.Instance) error {
+	errored := false
 
 	for _, instance := range instances {
-		if common.IsNetworkAccessible(instance) == true {
-			if err := c.execSSH(instance); err != nil {
-				common.ShowError(err)
-				ret = ret + 1
-			}
+		err := common.IsNetworkAccessible(instance)
+		if err != nil {
+			common.ShowError(err)
+			errored = true
+			continue
+		}
+
+		err = c.execSSH(instance)
+		if err != nil {
+			logger.Error("failed to ssh./n")
+			common.ShowError(err)
+			errored = true
 		}
 	}
 
-	return ret
+	if errored {
+		return errors.New("Some errors occurred.")
+	}
+
+	return nil
 }

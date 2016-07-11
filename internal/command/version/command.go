@@ -1,4 +1,4 @@
-package list
+package version
 
 import (
 	"os"
@@ -7,22 +7,23 @@ import (
 	"github.com/hirakiuc/ec2s/internal/options"
 )
 
-// Command describe list command.
-type Command struct {
-	*common.InstanceFilter
-}
+// VERSION number
+const VERSION string = "0.1.0"
+
+// Command describe version command.
+type Command struct{}
 
 var logger *common.Logger
 var command Command
 
 func init() {
 	logger = common.GetLogger()
-	command = Command{&common.InstanceFilter{}}
+	command = Command{}
 
 	_, err := options.AddCommand(
-		"list",
-		"List ec2 instances.",
-		"list command show ec2 instances.",
+		"version",
+		"show version",
+		"version command show this tool version",
 		&command)
 	if err != nil {
 		common.ShowError(err)
@@ -30,14 +31,14 @@ func init() {
 	}
 }
 
-// Execute invoke list command.
+// Execute invoke version command.
 func (c *Command) Execute(args []string) error {
 	if err := c.validateOptions(args); err != nil {
 		common.ShowError(err)
 		return err
 	}
 
-	if err := ShowEc2Instances(os.Stdout, c); err != nil {
+	if err := c.ShowVersion(os.Stdout); err != nil {
 		common.ShowError(err)
 		return err
 	}
@@ -46,11 +47,5 @@ func (c *Command) Execute(args []string) error {
 }
 
 func (c *Command) validateOptions(args []string) error {
-	opts := options.GetOptions()
-
-	if err := opts.Validate(); err != nil {
-		return err
-	}
-
 	return nil
 }

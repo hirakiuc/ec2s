@@ -1,61 +1,52 @@
 package elbs
 
 import (
-	"flag"
 	"os"
 
 	"github.com/hirakiuc/ec2s/internal/common"
-	"github.com/hirakiuc/ec2s/internal/config"
+	"github.com/hirakiuc/ec2s/internal/options"
 )
 
 // Command describe elbs command.
 type Command struct{}
 
 var logger *common.Logger
+var command Command
 
 func init() {
 	logger = common.GetLogger()
-}
+	command = Command{}
 
-// GetCommand create elbs command instance.
-func GetCommand() *Command {
-	return &Command{}
-}
-
-// Help return help message.
-func (c *Command) Help() string {
-	return "ec2s elbs"
-}
-
-// Run invoke elbs command.
-func (c *Command) Run(args []string) int {
-	if err := c.parseOptions(args); err != nil {
+	_, err := options.AddCommand(
+		"elbs",
+		"List elbs instances",
+		"elbs command show elb instances",
+		&command)
+	if err != nil {
 		common.ShowError(err)
-		return 1
+		os.Exit(1)
+	}
+}
+
+// Execute invoke elbs command.
+func (c *Command) Execute(args []string) error {
+	if err := c.validateOptions(args); err != nil {
+		common.ShowError(err)
+		return err
 	}
 
 	if err := c.showElbs(os.Stdout); err != nil {
 		common.ShowError(err)
-		return 1
+		return err
 	}
 
-	return 0
+	return nil
 }
 
-// Synopsis return command description.
-func (c *Command) Synopsis() string {
-	return "Show elbs."
-}
+func (c *Command) validateOptions(args []string) error {
+	opts := options.GetOptions()
 
-func (c *Command) parseOptions(args []string) error {
-	var configPath string
-	f := flag.NewFlagSet("elbs", flag.ExitOnError)
-	f.StringVar(&configPath, "c", "~/.ec2s.toml", "config path")
-	f.Parse(args)
-
-	_, err := config.LoadConfig(configPath)
-	if err != nil {
-		logger.Error("Can't load config file.\n")
+	if err := opts.Validate(); err != nil {
 		return err
 	}
 

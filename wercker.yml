@@ -40,7 +40,7 @@ deploy:
       name: go build
       code: |
         go build
-        export RELEASE_TAG="v$(./ec2s --version 2>&1)"
+        export RELEASE_TAG="v$(./ec2s version)"
         echo $RELEASE_TAG
     - script:
       name: install mitchellh/gox

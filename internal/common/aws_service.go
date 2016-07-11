@@ -1,6 +1,8 @@
 package common
 
 import (
+	"errors"
+
 	"github.com/hirakiuc/ec2s/internal/config"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -75,17 +77,20 @@ func ShowError(err error) {
 	}
 }
 
+// UnreachableMessage is a message for unreachable error message.
+const UnreachableMessage string = "The instance is not reachable."
+
 // IsNetworkAccessible check whether the EC2 instance is reachable or not.
-func IsNetworkAccessible(instance *ec2.Instance) bool {
+func IsNetworkAccessible(instance *ec2.Instance) error {
 	if *instance.State.Name != "running" {
 		logger.Warn("Instance(%s) is not running.\n", *instance.InstanceId)
-		return false
+		return errors.New(UnreachableMessage)
 	}
 
 	if instance.PublicIpAddress == nil {
 		logger.Warn("Instance(%s) does not have Public IPAddress.\n", *instance.InstanceId)
-		return false
+		return errors.New(UnreachableMessage)
 	}
 
-	return true
+	return nil
 }
