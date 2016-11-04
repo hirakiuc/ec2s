@@ -7,6 +7,7 @@ WARNING: This project is under development.
 [![wercker status](https://app.wercker.com/status/d2d4b1f8ee719ce0d5163e4088312f7e/s/master "wercker status")](https://app.wercker.com/project/bykey/d2d4b1f8ee719ce0d5163e4088312f7e)
 [![Code Climate](https://codeclimate.com/github/hirakiuc/ec2s/badges/gpa.svg)](https://codeclimate.com/github/hirakiuc/ec2s)
 [![Issue Count](https://codeclimate.com/github/hirakiuc/ec2s/badges/issue_count.svg)](https://codeclimate.com/github/hirakiuc/ec2s)
+[![Go Report Card](https://goreportcard.com/badge/hirakiuc/ec2s)](https://goreportcard.com/report/hirakiuc/ec2s)
 
 [GoDoc](https://godoc.org/github.com/hirakiuc/ec2s)
 
