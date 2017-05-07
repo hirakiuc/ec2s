@@ -7,8 +7,9 @@ install:
 	go install
 
 check:
-	go vet
-	golint
+	go vet . ./internal/...
+	golint ./internal/...
+	golint main.go
 
 clean:
 	go clean
