@@ -12,9 +12,7 @@ _test
 vendor
 
 # wercker cli
-_builds
-_projects
-_steps
+/.wercker
 
 # Architecture specific extensions/prefixes
 *.[568vq]

@@ -1,8 +1,8 @@
 hash: 142c276aa737ed1de704062fe0ec0ec387e270574cc2079c322e313ea19560d7
-updated: 2017-05-07T10:42:51.028114518+09:00
+updated: 2017-05-10T20:58:39.926725863+09:00
 imports:
 - name: github.com/aws/aws-sdk-go
-  version: 501dd3226ceb6863d89d82e9f7c9f59a43efb008
+  version: 2a4ef28e5761cdd06ab7fcab2615342d729ab756
   subpackages:
   - aws
   - aws/awserr
@@ -12,37 +12,47 @@ imports:
   - aws/corehandlers
   - aws/credentials
   - aws/credentials/ec2rolecreds
+  - aws/credentials/endpointcreds
+  - aws/credentials/stscreds
   - aws/defaults
   - aws/ec2metadata
+  - aws/endpoints
   - aws/request
   - aws/session
-  - private/endpoints
+  - aws/signer/v4
   - private/protocol
   - private/protocol/ec2query
   - private/protocol/query
   - private/protocol/query/queryutil
   - private/protocol/rest
   - private/protocol/xml/xmlutil
-  - private/signer/v4
-  - private/waiter
   - service/ec2
   - service/elb
+  - service/sts
 - name: github.com/BurntSushi/toml
-  version: f0aeabca5a127c4078abb8c8d64298b147264b55
+  version: b26d9c308763d68093482582cea63d69be07a0f0
 - name: github.com/go-ini/ini
-  version: 12f418cc7edc5a618a51407b7ac1f1f512139df3
+  version: e7fea39b01aea8d5671f6858f0532f56e8bff3a5
 - name: github.com/jessevdk/go-flags
-  version: d6bd1ed4cdbe19f5fc9cc03da1bc440c62f743f1
+  version: 460c7bb0abd6e927f2767cadc91aa6ef776a98b4
 - name: github.com/jmespath/go-jmespath
-  version: 0b12d6b521d83fc7f755e7cfc1b1fbdd35a01a74
+  version: bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d
+- name: github.com/mattn/go-colorable
+  version: ded68f7a9561c023e790de24279db7ebf473ea80
+- name: github.com/mattn/go-isatty
+  version: fc9e8d8ef48496124e79ae0df75490096eccf6fe
 - name: github.com/mattn/go-runewidth
-  version: d6bea18f789704b5f83375793155289da36a3c7f
+  version: 97311d9f7767e3d6f422ea06661bc2c7a19e8a5d
 - name: github.com/mgutz/ansi
-  version: c286dcecd19ff979eeb73ea444e479b903f2cfcb
+  version: 9520e82c474b0a04dd04f8a40959027271bab992
 - name: github.com/mitchellh/cli
-  version: 168daae10d6ff81b8b1201b0a4c9607d7e9b82e3
+  version: ee8578a9c12a5bb9d55303b9665cc448772c81b8
 - name: github.com/olekukonko/tablewriter
-  version: 279fecc91ba77130f753d073259d7f9e246acdda
+  version: febf2d34b54a69ce7530036c7503b1c9fbfdf0bb
+- name: golang.org/x/sys
+  version: 9ccfe848b9db8435a24c424abbc07a921adf1df5
+  subpackages:
+  - unix
 - name: gopkg.in/pipe.v2
   version: 3c2ca4d525447ec8b2f606a6974f9c9f40831f26
 testImports: []
