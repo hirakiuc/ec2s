@@ -13,11 +13,9 @@ const VERSION string = "0.1.0"
 // Command describe version command.
 type Command struct{}
 
-var logger *common.Logger
 var command Command
 
 func init() {
-	logger = common.GetLogger()
 	command = Command{}
 
 	_, err := options.AddCommand(

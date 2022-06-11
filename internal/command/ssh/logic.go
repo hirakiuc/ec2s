@@ -53,6 +53,5 @@ func (c *Command) execSSH(instance *ec2.Instance) error {
 		return err
 	}
 
-	cmd.Wait()
-	return nil
+	return cmd.Wait()
 }
