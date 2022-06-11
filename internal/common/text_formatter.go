@@ -11,11 +11,7 @@ type TextFormatter struct {
 
 func colorForLogLevel(level LogLevel) string {
 	switch level {
-	case PanicLevel:
-		return "red"
-	case FatalLevel:
-		return "red"
-	case ErrorLevel:
+	case PanicLevel, FatalLevel, ErrorLevel:
 		return "red"
 	case WarnLevel:
 		return "yellow"
@@ -30,10 +26,11 @@ func colorForLogLevel(level LogLevel) string {
 
 // Format return formatted string.
 func (f *TextFormatter) Format(level LogLevel, message string) ([]byte, error) {
-	if f.Colored == false {
+	if !f.Colored {
 		return []byte(message), nil
 	}
 
 	msg := ansi.Color(message, colorForLogLevel(level))
+
 	return []byte(msg), nil
 }

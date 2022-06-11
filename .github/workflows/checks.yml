@@ -16,10 +16,6 @@ jobs:
         check-latest: true
         cache: true
 
-    - name: Make check
-      run:
-        make check
-
     - name: Make build
       run:
         make build

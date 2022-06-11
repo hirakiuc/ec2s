@@ -21,19 +21,6 @@ func nameOfInstance(instance *ec2.Instance) string {
 	return UNDEFINED
 }
 
-func vpcName(vpc *ec2.Vpc) string {
-	if vpc == nil {
-		return UNDEFINED
-	}
-
-	for _, t := range vpc.Tags {
-		if *t.Key == "Name" {
-			return *t.Value
-		}
-	}
-	return UNDEFINED
-}
-
 func ipAddress(instance *ec2.Instance) string {
 	if instance.PublicIpAddress != nil {
 		return *instance.PublicIpAddress

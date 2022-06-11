@@ -57,8 +57,7 @@ func (c *Command) execScp(instance *ec2.Instance) error {
 		return err
 	}
 
-	cmd.Wait()
-	return nil
+	return cmd.Wait()
 }
 
 func expandPath(path string, instance *ec2.Instance) string {

@@ -13,7 +13,7 @@ install:
 	go install
 
 check:
-	go vet . ./internal/...
+	golangci-lint run ./...
 
 clean:
 	go clean

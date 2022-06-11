@@ -39,9 +39,14 @@ func ShowEc2Instances(writer io.Writer, options common.FilterInterface) error {
 	if err != nil {
 		return err
 	}
+
 	instanceCache := cache.GetEc2InstanceCache()
 
-	service := common.Ec2Service()
+	service, err := common.Ec2Service()
+	if err != nil {
+		return err
+	}
+
 	params, err := options.InstancesFilter()
 	if err != nil {
 		return err
@@ -50,6 +55,7 @@ func ShowEc2Instances(writer io.Writer, options common.FilterInterface) error {
 	res, err := service.DescribeInstances(params)
 	if err != nil {
 		logger.Error("failed to load EC2 instances.\n")
+
 		return err
 	}
 
@@ -69,5 +75,6 @@ func ShowEc2Instances(writer io.Writer, options common.FilterInterface) error {
 	}
 
 	table.Render()
+
 	return nil
 }
