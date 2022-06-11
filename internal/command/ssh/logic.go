@@ -49,7 +49,7 @@ func (c *Command) execSSH(instance *ec2.Instance) error {
 
 	err = cmd.Start()
 	if err != nil {
-		logger.Error("failed to execute command.\n", err)
+		logger.Error("failed to execute command: %v\n", err)
 		return err
 	}
 

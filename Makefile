@@ -8,8 +8,6 @@ install:
 
 check:
 	go vet . ./internal/...
-	golint ./internal/...
-	golint main.go
 
 clean:
 	go clean
