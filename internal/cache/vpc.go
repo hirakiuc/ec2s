@@ -11,8 +11,10 @@ type VpcCache struct {
 	Entries map[string]*ec2.Vpc
 }
 
-var vpcCache *VpcCache
-var logger *common.Logger
+var (
+	vpcCache *VpcCache
+	logger   *common.Logger
+)
 
 func init() {
 	logger = common.GetLogger()
@@ -41,16 +43,22 @@ func (cache *VpcCache) WriteEntry(vpcID string, vpc *ec2.Vpc) {
 
 // MakeCache create Vpc Cache
 func (cache *VpcCache) MakeCache() error {
-	service := common.Ec2Service()
+	service, err := common.Ec2Service()
+	if err != nil {
+		return err
+	}
+
 	res, err := service.DescribeVpcs(nil)
 	if err != nil {
 		logger.Error("failed to make vpcs cache.\n")
+
 		return err
 	}
 
 	for _, vpc := range res.Vpcs {
 		cache.WriteEntry(*vpc.VpcId, vpc)
 	}
+
 	return nil
 }
 

@@ -24,12 +24,17 @@ func (c *Command) showElbs(writer io.Writer) error {
 		return err
 	}
 
-	service := common.ElbService()
+	service, err := common.ElbService()
+	if err != nil {
+		return err
+	}
 
 	params := &elb.DescribeLoadBalancersInput{}
+
 	res, err := service.DescribeLoadBalancers(params)
 	if err != nil {
 		logger.Error("failed to fetch elbs.\n")
+
 		return err
 	}
 
@@ -41,5 +46,6 @@ func (c *Command) showElbs(writer io.Writer) error {
 	}
 
 	table.Render()
+
 	return nil
 }

@@ -13,33 +13,46 @@ import (
 )
 
 // ElbService is a aws Elb client.
-func ElbService() *elb.ELB {
+func ElbService() (*elb.ELB, error) {
 	conf := config.GetConfig()
 
+	awsSession, err := session.NewSession()
+	if err != nil {
+		return nil, err
+	}
+
 	return elb.New(
-		session.New(),
+		awsSession,
 		&aws.Config{
 			Region:      aws.String(conf.Aws.Region),
 			Credentials: conf.AwsCredentials(),
 		},
-	)
+	), nil
 }
 
 // Ec2Service is a aws EC2 client.
-func Ec2Service() *ec2.EC2 {
+func Ec2Service() (*ec2.EC2, error) {
 	conf := config.GetConfig()
 
+	awsSession, err := session.NewSession()
+	if err != nil {
+		return nil, err
+	}
+
 	return ec2.New(
-		session.New(),
+		awsSession,
 		&aws.Config{
 			Region:      aws.String(conf.Aws.Region),
 			Credentials: conf.AwsCredentials(),
 		},
-	)
+	), nil
 }
 
 func findVpcs(params *ec2.DescribeVpcsInput) ([]*ec2.Vpc, error) {
-	service := Ec2Service()
+	service, err := Ec2Service()
+	if err != nil {
+		return []*ec2.Vpc{}, err
+	}
 
 	res, err := service.DescribeVpcs(params)
 	if err != nil {

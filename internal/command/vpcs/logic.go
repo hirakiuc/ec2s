@@ -8,10 +8,15 @@ import (
 )
 
 func (c *Command) showVpcs(writer io.Writer) error {
-	service := common.Ec2Service()
+	service, err := common.Ec2Service()
+	if err != nil {
+		return err
+	}
+
 	res, err := service.DescribeVpcs(nil)
 	if err != nil {
 		logger.Error("failed to fetch vpcs.\n")
+
 		return err
 	}
 
@@ -23,5 +28,6 @@ func (c *Command) showVpcs(writer io.Writer) error {
 	}
 
 	table.Render()
+
 	return nil
 }
