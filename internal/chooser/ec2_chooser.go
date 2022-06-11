@@ -54,7 +54,7 @@ func ChooseEc2Instances(options common.FilterInterface) ([]*ec2.Instance, error)
 
 	output, err := pipe.CombinedOutput(p)
 	if err != nil {
-		logger.Error("Command failed.\n", err)
+		logger.Error("Command failed: '%v'\n", err)
 		return []*ec2.Instance{}, err
 	}
 
